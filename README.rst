@@ -36,6 +36,12 @@ After instalation of the package, go to the console and type::
 
 Now, the full documentation of the package, including a User Guide, will be availabe in ``sphinx/index.html``.
 
+Problems
+--------
+
+In case of problems, please contact ivana.chingovska@idiap.ch
+
+
 .. _bob: https://www.idiap.ch/software/bob
 .. _msu mfsd: http://www.cse.msu.edu/rgroups/biometrics/Publications/Databases/MSUMobileFaceSpoofing/index.htm
 
