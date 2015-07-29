@@ -59,7 +59,7 @@ class File(object):
     return bool(self.make_path() in rotated_videos)
       
     
-  def get_clientid(self):
+  def get_client_id(self):
     """The ID of the client. Value from 1 to 50. Clients in the train and devel set may have IDs from 1 to 20; clients in the test set have IDs from 21 to 50."""
 
     stem_file = self.filename.split('/')[1] # the file stem of the filename

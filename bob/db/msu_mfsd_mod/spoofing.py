@@ -43,7 +43,7 @@ class File(FileBase):
   make_path.__doc__ = FileBase.make_path.__doc__
 
   def get_client_id(self):
-    return self.__f.get_clientid()
+    return self.__f.get_client_id()
   get_client_id.__doc__ = FileBase.get_client_id.__doc__
 
   def is_real(self):
@@ -158,6 +158,7 @@ class Database(DatabaseBase):
     types = self.__kwargs.get('types', self.__db.types)
     qualities = self.__kwargs.get('qualities', self.__db.qualities)
     if not types: types = self.__db.types
+    if not qualities: qualities = self.__db.qualities
     return types, qualities, self.__kwargs.get('fold_no', 1) #1
 
   def get_clients(self, group=None):
@@ -172,17 +173,22 @@ class Database(DatabaseBase):
     
     return list(set([obj.get_client_id() for obj in objects]))
    
-  def get_enroll_data(self, group=None,fold_no=0, enroll_quality='laptop'):
+  def get_enroll_data(self, group=None,fold_no=-1, enroll_quality='laptop'):
     __doc__ = DatabaseBase.get_enroll_data.__doc__
     """Returns enrollment objects for a specific group"""
     # enroll_quality is a parameter stating which kind of videos will be used for enrollment
+
+    if fold_no == -1:
+      types, qualities, fold_no = self.__parse_arguments()
+    else:
+      types, qualities, _ = self.__parse_arguments()  
 
     if group == 'train':    
       _, retval = self.__db.cross_valid_foldobjects(cls='real', fold_no=fold_no, qualities=enroll_quality)
     elif group == 'devel':   
       retval, _ = self.__db.cross_valid_foldobjects(cls='real', fold_no=fold_no, qualities=enroll_quality) 
     elif group == 'test':
-      retval = self.__db.objects(groups='test', cls='real', qualities=enroll_quality)
+      retval = self.__db.objects(groups='test', cls='real', fold_no=fold_no, qualities=enroll_quality)
     
     return retval #raise RuntimeError("This dataset does not have enrollment data")
   get_enroll_data.__doc__ = DatabaseBase.get_enroll_data.__doc__
@@ -244,7 +250,8 @@ class Database(DatabaseBase):
       qualities = list(set(qualities) - set(enroll_quality))
     testReal = self.__db.objects(groups='test', cls='real', qualities=qualities, fold_no=fold_no)
     
-    return [File(f) for f in testReal], [File(f) for f in testAttack]
+    #return [File(f) for f in testReal], [File(f) for f in testAttack]
+    return testReal, testAttack
   get_test_data.__doc__ = DatabaseBase.get_test_data.__doc__
 
 
@@ -252,8 +259,8 @@ class Database(DatabaseBase):
     return ('types','qualities')
     #raise NotImplementedError("Test filters have not yet been implemented for this database")
 
-  def get_filtered_test_data(self, filter, fold_no=0):
-    real, attack = self.get_test_data(fold_no = fold_no)
+  def get_filtered_test_data(self, filter, fold_no=-1, enroll_quality=None):
+    real, attack = self.get_test_data(fold_no = fold_no, enroll_quality = enroll_quality)
 
     if filter == 'types':
       return {
@@ -267,8 +274,8 @@ class Database(DatabaseBase):
           'mobile': ([k for k in real if k.get_quality() == 'mobile'], [k for k in attack if k.get_quality() == 'mobile']),
           }
       
-  def get_filtered_devel_data(self, filter, fold_no=0):
-    real, attack = self.get_devel_data(fold_no = fold_no)
+  def get_filtered_devel_data(self, filter, fold_no=-1, enroll_quality=None):
+    real, attack = self.get_devel_data(fold_no = fold_no, enroll_quality = enroll_quality)
 
     if filter == 'types':
       return {

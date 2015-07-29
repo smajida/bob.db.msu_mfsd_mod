@@ -79,7 +79,7 @@ class MFSDDatabaseTest(unittest.TestCase):
 
     filename = os.path.join('real', 'real_client001_android_SD_scene01')
     thisobj = File(filename, 'real', 'test')
-    self.assertEqual(thisobj.get_clientid(), '01')
+    self.assertEqual(thisobj.get_client_id(), '01')
     self.assertEqual(thisobj.get_type(), None)
     self.assertEqual(thisobj.get_quality(), 'mobile')
 
@@ -88,7 +88,7 @@ class MFSDDatabaseTest(unittest.TestCase):
 
     filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
     thisobj = File(filename, 'attack', 'test')
-    self.assertEqual(thisobj.get_clientid(), '03')
+    self.assertEqual(thisobj.get_client_id(), '03')
     self.assertEqual(thisobj.get_type(), 'video_hd')
     self.assertEqual(thisobj.get_quality(), 'laptop')
 
