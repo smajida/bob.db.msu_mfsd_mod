@@ -29,7 +29,6 @@ from . import Database, File
 def main():
     db = Database()
     
-    import ipdb; ipdb.set_trace()
     #fobj = db.objects() #280
     #fobj = db.objects(groups='train', ids=['01']) #0
     #fobj = db.objects(groups='devel', ids=['55'], fold_no=1)
@@ -37,12 +36,12 @@ def main():
     
     filename = os.path.join('real', 'real_client003_android_SD_scene01')
     thisobj = File(filename, 'real', 'test')
-    print thisobj.is_rotated()
+    print(thisobj.is_rotated())
     #self.assertTrue(thisobj[0].is_rotated())
 
     filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
     thisobj = File(filename, 'attack', 'test')
-    print thisobj.is_rotated()
+    print(thisobj.is_rotated())
     #self.assertFalse(thisobj[0].is_rotated())
 
 
