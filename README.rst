@@ -2,6 +2,21 @@
 .. Ivana Chingovska <ivana.chingovska@idiap.ch>
 .. Thu  9 Apr 12:24:28 CEST 2015
 
+.. image:: http://img.shields.io/badge/docs-stable-yellow.png
+   :target: http://pythonhosted.org/bob.db.msu_mfsd_mod/index.html
+.. image:: http://img.shields.io/badge/docs-latest-orange.png
+   :target: https://www.idiap.ch/software/bob/docs/latest/bioidiap/bob.db.msu_mfsd_mod/master/index.html
+.. image:: https://travis-ci.org/bioidiap/bob.db.msu_mfsd_mod.svg?branch=master
+   :target: https://travis-ci.org/bioidiap/bob.db.msu_mfsd_mod
+.. image:: https://coveralls.io/repos/bioidiap/bob.db.msu_mfsd_mod/badge.svg?branch=master
+   :target: https://coveralls.io/r/bioidiap/bob.db.msu_mfsd_mod
+.. image:: https://img.shields.io/badge/github-master-0000c0.png
+   :target: https://github.com/bioidiap/bob.db.msu_mfsd_mod/tree/master
+.. image:: http://img.shields.io/pypi/v/bob.db.msu_mfsd_mod.png
+   :target: https://pypi.python.org/pypi/bob.db.msu_mfsd_mod
+.. image:: http://img.shields.io/pypi/dm/bob.db.msu_mfsd_mod.png
+   :target: https://pypi.python.org/pypi/bob.db.msu_mfsd_mod
+
 ====================================================
  MSU Mobile Face Spoofing Database Interface for Bob
 ====================================================
