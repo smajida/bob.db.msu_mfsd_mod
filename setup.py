@@ -15,7 +15,7 @@ setup(
     name='bob.db.msu_mfsd_mod',
     version=version,
     description='MSU Mobile Face Spoofing Database Access API for Bob, with modified protocol',
-    url='http://pypi.python.org/pypi/bob.db.msu_mfsd_mod',
+    url='http://github.com/bioidiap/bob.db.msu_mfsd_mod',
     license='GPLv3',
     author='Ivana Chingovska',
     author_email='ivana.chingovska@idiap.ch',
