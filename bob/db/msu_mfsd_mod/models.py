@@ -4,6 +4,7 @@
 
 import os
 import bob.io.base
+import bob.io.video
 import bob.db.base
 import numpy
 
@@ -154,7 +155,7 @@ class File(object):
     return coords
  
 
-  def load(self, directory=None, extension='.hdf5'):
+  def load(self, directory=None, extension=None):
     """Loads the data at the specified location and using the given extension.
 
     Keyword parameters:
@@ -170,7 +171,23 @@ class File(object):
       [optional] The extension of the filename - this will control the type of
       output and the codec for saving the input blob.
     """
-    return bob.io.base.load(self.make_path(directory, extension))
+
+    if extension is None:
+        if self.get_quality() == 'laptop':
+            extension = '.mov'
+            vfilename = self.make_path(directory, extension)
+            video = bob.io.video.reader(vfilename)
+            vin = video.load()
+        else:
+            extension = '.mp4'
+            vin =  bob.io.base.load(self.make_path(directory, extension))
+    else:
+        vin =  bob.io.base.load(self.make_path(directory, extension))
+
+    if self.is_rotated():
+        vin = vin[:, :, ::-1,:]
+    
+    return vin
 
 
   def save(self, data, directory=None, extension='.hdf5'):

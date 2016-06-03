@@ -24,6 +24,11 @@ import os, sys
 import unittest
 from . import Database, File
 from nose.plugins.skip import SkipTest
+import bob.io.base
+import bob.io.video
+import bob.io.image
+import bob.db.base
+import numpy as np
 
 class MFSDDatabaseTest(unittest.TestCase):
   """Performs various tests on the MSU_MFSD spoofing attack database."""
@@ -104,3 +109,33 @@ class MFSDDatabaseTest(unittest.TestCase):
     filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
     thisobj = File(filename, 'attack', 'test')
     self.assertFalse(thisobj.is_rotated())
+
+  def test07_check_flip_on_load(self):
+      #import pdb
+      dbfolder = '/idiap/resource/database/MSU-MFSD/scene01/'
+      self.assertTrue(os.path.isdir(dbfolder))  #make sure the dbfolder is still correct
+      #test the 'rotated' file is correctly presented.
+      file1 = os.path.join('real', 'real_client005_android_SD_scene01')
+      print file1
+      thisobj = File(file1, 'real','test') 
+      print thisobj
+#      import ipdb; ipdb.set_trace();
+      vin = thisobj.load(dbfolder)
+      firstframe = vin[0]
+      self.assertTrue(os.path.exists('bob/db/msu_mfsd_mod/test_images/real_client005_android_SD_scene01_frame0_correct.hdf5'))
+      hf = bob.io.base.HDF5File('bob/db/msu_mfsd_mod/test_images/real_client005_android_SD_scene01_frame0_correct.hdf5', 'r')
+      reference_frame = hf.read('color_frame')
+      self.assertTrue(np.array_equal(firstframe, reference_frame))
+      # test that 'not_rotated' files are also correctly presented.
+      file2= os.path.join('real', 'real_client005_laptop_SD_scene01')
+      print 'testing file:', file2
+      thisobj = File(file2, 'real','test') 
+      print thisobj
+      vin = thisobj.load(dbfolder)
+      firstframe = vin[0]
+      self.assertTrue(os.path.exists('bob/db/msu_mfsd_mod/test_images/real_client005_laptop_SD_scene01_frame0_correct.hdf5'))
+      hf = bob.io.base.HDF5File('bob/db/msu_mfsd_mod/test_images/real_client005_laptop_SD_scene01_frame0_correct.hdf5', 'r')
+      reference_frame = hf.read('color_frame')
+      self.assertTrue(np.array_equal(firstframe, reference_frame))
+
+
