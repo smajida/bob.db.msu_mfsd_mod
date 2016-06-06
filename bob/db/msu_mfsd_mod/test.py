@@ -129,7 +129,7 @@ class MFSDDatabaseTest(unittest.TestCase):
       hf = bob.io.base.HDF5File('bob/db/msu_mfsd_mod/test_images/real_client005_android_SD_scene01_frame0_correct.hdf5', 'r')
       reference_frame1 = hf.read('color_frame')
       difsum1  = np.sum(np.fabs(firstframe - reference_frame1))
-      print 'flipped video: SAD:', difsum1
+#        print 'flipped video: SAD:', difsum1
       self.assertTrue(np.array_equal(firstframe, reference_frame1))
       #
 #       # test that 'not_rotated' files are also correctly presented.
