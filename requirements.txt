@@ -2,6 +2,7 @@ bob.extension
 bob.blitz
 bob.core
 bob.io.base
+bob.io.video
 bob.db.base
 bob.ip.color
 bob.ip.draw
