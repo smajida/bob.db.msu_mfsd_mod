@@ -175,14 +175,16 @@ class File(object):
     if extension is None:
         if self.get_quality() == 'laptop':
             extension = '.mov'
-            vfilename = self.make_path(directory, extension)
-            video = bob.io.video.reader(vfilename)
-            vin = video.load()
         else:
             extension = '.mp4'
-            vin =  bob.io.base.load(self.make_path(directory, extension))
+
+    if extension == '.mov' or extension == '.mp4':
+        vfilename = self.make_path(directory, extension)
+        video = bob.io.video.reader(vfilename)
+        vin = video.load()
     else:
         vin =  bob.io.base.load(self.make_path(directory, extension))
+
 
     if self.is_rotated():
         vin = vin[:, :, ::-1,:]
