@@ -189,7 +189,9 @@ class Database(DatabaseBase):
       retval, _ = self.__db.cross_valid_foldobjects(cls='real', fold_no=fold_no, qualities=enroll_quality) 
     elif group == 'test':
       retval = self.__db.objects(groups='test', cls='real', fold_no=fold_no, qualities=enroll_quality)
-    
+
+    retval = [File(k) for k in retval]
+ 
     return retval #raise RuntimeError("This dataset does not have enrollment data")
   get_enroll_data.__doc__ = DatabaseBase.get_enroll_data.__doc__
 
