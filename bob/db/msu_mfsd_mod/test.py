@@ -22,6 +22,7 @@
 
 import os, sys
 import unittest
+import pkg_resources
 from . import Database, File
 from nose.plugins.skip import SkipTest
 import bob.io.base
@@ -111,22 +112,24 @@ class MFSDDatabaseTest(unittest.TestCase):
     self.assertFalse(thisobj.is_rotated())
 
   def test07_check_flip_on_load(self):
-      dbfolder = 'bob/db/msu_mfsd_mod/test_images/'  #simulated db repo. containing only the 2 videos used in this test.
+#       dbfolder = 'bob/db/msu_mfsd_mod/test_images/'  #simulated db repo. containing only the 2 videos used in this test.
+#      dbfolder = pkg_resources.resource_filename('bob.db.msu_mfsd_mod','test_images')
+      dbfolder = pkg_resources.resource_filename(__name__ , 'test_images')
       flipped_file = 'real_client005_android_SD_scene01'
       upright_file = 'real_client005_laptop_SD_scene01'
       #make sure the dbfolder and all files necessary exist.
       self.assertTrue(os.path.isdir(dbfolder))
-      self.assertTrue(os.path.exists('bob/db/msu_mfsd_mod/test_images/real_client005_android_SD_scene01_frame0_correct.hdf5'))
-      self.assertTrue(os.path.exists('bob/db/msu_mfsd_mod/test_images/real_client005_laptop_SD_scene01_frame0_correct.hdf5'))
-      self.assertTrue(os.path.exists('bob/db/msu_mfsd_mod/test_images/real/real_client005_android_SD_scene01.mp4'))
-      self.assertTrue(os.path.exists('bob/db/msu_mfsd_mod/test_images/real/real_client005_laptop_SD_scene01.mov'))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_laptop_SD_scene01_frame0_correct.hdf5')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_android_SD_scene01.mp4')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_laptop_SD_scene01.mov')))
 
       #test the 'rotated' file is correctly presented.
       file1 = os.path.join('real', flipped_file)
       thisobj = File(file1, 'real','test') 
       vin = thisobj.load(dbfolder)
       firstframe = vin[0]
-      hf = bob.io.base.HDF5File('bob/db/msu_mfsd_mod/test_images/real_client005_android_SD_scene01_frame0_correct.hdf5', 'r')
+      hf = bob.io.base.HDF5File(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5'), 'r')
       reference_frame1 = hf.read('color_frame')
       difsum1  = np.sum(np.fabs(firstframe - reference_frame1))
 #        print 'flipped video: SAD:', difsum1
@@ -138,7 +141,7 @@ class MFSDDatabaseTest(unittest.TestCase):
 #       thisobj = File(file2, 'real','test') 
 #       vin = thisobj.load(dbfolder)
 #       firstframe = vin[0]
-#       hf = bob.io.base.HDF5File('bob/db/msu_mfsd_mod/test_images/real_client005_laptop_SD_scene01_frame0_correct.hdf5', 'r')
+#       hf = bob.io.base.HDF5File(os.path.join(dbfolder, 'real_client005_laptop_SD_scene01_frame0_correct.hdf5'), 'r')
 #       reference_frame = hf.read('color_frame')
 #       difsum2  = np.sum(np.fabs(firstframe - reference_frame))
 #       print 'upright video: SAD:', difsum2 #returns Inf on travis, but 0 (as it should be) on my machine.
