@@ -20,7 +20,7 @@
 ====================================================
 
 This package is part of the signal-processing and machine learning toolbox
-Bob_. <SHORTINTRO>It provides a Bob-interface for the MSU Mobile Face Spoofing Database.
+Bob_. It provides a Bob-interface for the MSU Mobile Face Spoofing Database.
 
 
 Installation
