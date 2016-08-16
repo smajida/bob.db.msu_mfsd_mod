@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-#Ivana Chingovska <ivana.chingovska@idiap.ch>
+# Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
 #Tue 10 Mar 16:07:27 CET 2015
 
 from setuptools import setup, find_packages
@@ -15,10 +15,10 @@ setup(
     name='bob.db.msu_mfsd_mod',
     version=version,
     description='MSU Mobile Face Spoofing Database Access API for Bob, with modified protocol',
-    url='http://github.com/bioidiap/bob.db.msu_mfsd_mod',
-    license='GPLv3',
-    author='Ivana Chingovska',
-    author_email='ivana.chingovska@idiap.ch',
+    url='http://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod',
+    license='BSD',
+    author='Ivana Chingovska','Sushil Bhattacharjee',
+    author_email='ivana.chingovska@idiap.ch','sushil.bhattacharjee@idiap.ch',
     long_description=open('README.rst').read(),
 
     # This line is required for any distutils based packaging.

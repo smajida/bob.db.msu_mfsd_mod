@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-#Ivana Chingovska <ivana.chingovska@idiap.ch>
+# Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
 #Mon 16 Mar 15:10:31 CET 2015
 
 """MSU Mobile Face Spoofing Database (MFSD) implementation as antispoofing.utils.db.Database."""

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-#Ivana Chingovska <ivana.chingovska@idiap.ch>
+# Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
 #Tue 10 Mar 16:28:54 CET 2015
 
 """Bob Database Driver entry-point for modified protocol of MSU Mobile Face Spoofing Database.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#Ivana Chingovska <ivana.chingovska@idiap.ch>
+#Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
 #Mon 16 Mar 12:49:23 CET 2015
 
 import os
