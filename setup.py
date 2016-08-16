@@ -18,7 +18,7 @@ setup(
     url='http://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod',
     license='BSD',
     author='Ivana Chingovska, Sushil Bhattacharjee',
-    author_email='ivana.chingovska@idiap.ch sushil.bhattacharjee@idiap.ch',
+    author_email='ivana.chingovska@idiap.ch, sushil.bhattacharjee@idiap.ch',
     long_description=open('README.rst').read(),
 
     # This line is required for any distutils based packaging.
@@ -56,7 +56,7 @@ setup(
       'Framework :: Bob',
       'Development Status :: 4 - Beta',
       'Intended Audience :: Science/Research',
-      'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+      'License :: OSI Approved :: BSD License',
       'Natural Language :: English',
       'Programming Language :: Python',
       'Programming Language :: Python :: 3',
