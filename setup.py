@@ -17,8 +17,8 @@ setup(
     description='MSU Mobile Face Spoofing Database Access API for Bob, with modified protocol',
     url='http://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod',
     license='BSD',
-    author='Ivana Chingovska',
-    author_email='ivana.chingovska@idiap.ch',
+    author='Ivana Chingovska, Sushil Bhattacharjee',
+    author_email='ivana.chingovska@idiap.ch sushil.bhattacharjee@idiap.ch',
     long_description=open('README.rst').read(),
 
     # This line is required for any distutils based packaging.
