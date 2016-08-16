@@ -185,7 +185,6 @@ class File(object):
     else:
         vin =  bob.io.base.load(self.make_path(directory, extension))
 
-
     if self.is_rotated():
         vin = vin[:, :, ::-1,:]
     
