@@ -102,13 +102,15 @@ class MFSDDatabaseTest(unittest.TestCase):
 #      dbfolder = pkg_resources.resource_filename('bob.db.msu_mfsd_mod','test_images')
       dbfolder = pkg_resources.resource_filename(__name__ , 'test_images')
       flipped_file = 'real_client005_android_SD_scene01'
-      upright_file = 'real_client005_laptop_SD_scene01'
+      upright_file = 'real_client022_android_SD_scene01' #'real_client005_laptop_SD_scene01'
       #make sure the dbfolder and all files necessary exist.
       self.assertTrue(os.path.isdir(dbfolder))
       self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5')))
-      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_laptop_SD_scene01_frame0_correct.hdf5')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client022_android_SD_scene01_frame0_correct.hdf5')))
+#      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_laptop_SD_scene01_frame0_correct.hdf5')))
       self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_android_SD_scene01.mp4')))
-      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_laptop_SD_scene01.mov')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client022_android_SD_scene01.mp4')))
+#      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_laptop_SD_scene01.mov')))
 
       #test the 'rotated' file is correctly presented.
       file1 = os.path.join('real', flipped_file)
@@ -127,7 +129,7 @@ class MFSDDatabaseTest(unittest.TestCase):
 #       thisobj = File(file2, 'real','test') 
 #       vin = thisobj.load(dbfolder)
 #       firstframe = vin[0]
-#       hf = bob.io.base.HDF5File(os.path.join(dbfolder, 'real_client005_laptop_SD_scene01_frame0_correct.hdf5'), 'r')
+#       hf = bob.io.base.HDF5File(os.path.join(dbfolder, 'real_client022_android_SD_scene01_frame0_correct.hdf5'), 'r')
 #       reference_frame = hf.read('color_frame')
 #       difsum2  = np.sum(np.fabs(firstframe - reference_frame))
 #       print 'upright video: SAD:', difsum2 #returns Inf on travis, but 0 (as it should be) on my machine.
