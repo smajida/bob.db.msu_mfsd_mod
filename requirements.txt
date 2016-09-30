@@ -12,4 +12,3 @@ bob.measure
 bob.learn.activation
 bob.learn.linear
 bob.learn.libsvm
-antispoofing.utils
