@@ -42,14 +42,10 @@ setup(
         'msu_mfsd_mod = bob.db.msu_mfsd_mod.driver:Interface',
       ],
 
-      # antispoofing database declaration
-      'antispoofing.utils.db': [
-        'msu_mfsd_mod = bob.db.msu_mfsd_mod.spoofing:Database',
-      ],
 
-      'console_scripts': [
-        'testme.py = bob.db.msu_mfsd_mod.testme:main',
-      ],
+#      'console_scripts': [
+#        'testme.py = bob.db.msu_mfsd_mod.testme:main',
+#      ],
     },
 
     classifiers = [

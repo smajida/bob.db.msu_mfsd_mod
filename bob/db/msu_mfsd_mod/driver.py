@@ -6,10 +6,16 @@
 """Bob Database Driver entry-point for modified protocol of MSU Mobile Face Spoofing Database.
 """
 
+#import os
+#import sys
+#from bob.db.base.driver import Interface as BaseInterface
+#from . import Database
+
 import os
 import sys
 from bob.db.base.driver import Interface as BaseInterface
-from . import Database
+from .query import Database
+
 
 # Driver API
 # ==========
@@ -66,26 +72,41 @@ class Interface(BaseInterface):
   def name(self):
     return 'msu_mfsd_mod'
 
+# OLD VERSION of files(), when db was not sql-based.
+#  def files(self):
+#    from pkg_resources import resource_filename
+#    raw_files = (
+##      'train_sub_list.txt',
+##      'test_sub_list.txt',
+##      'train_clients_1.txt',
+##      'train_clients_2.txt',
+##      'train_clients_3.txt',
+##      'train_clients_4.txt',
+##      'train_clients_5.txt',
+##      'test_clients.txt',
+#       'bob/db/msu_mfsd_mod/folds/clients_fold1.txt',
+#       'bob/db/msu_mfsd_mod/folds/clients_fold2.txt',
+#       'bob/db/msu_mfsd_mod/folds/clients_fold3.txt',
+#       'bob/db/msu_mfsd_mod/folds/clients_fold4.txt',
+#       'bob/db/msu_mfsd_mod/folds/clients_fold5.txt',
+#       'bob/db/msu_mfsd_mod/folds/msu_mfsd_mod_realvids.txt',
+#       'bob/db/msu_mfsd_mod/folds/msu_mfsd_mod_attackvids.txt',
+#      )
+#    return [resource_filename(__name__, k) for k in raw_files]
+
   def files(self):
+
     from pkg_resources import resource_filename
-    raw_files = (
-      'train_sub_list.txt',
-      'test_sub_list.txt',
-      'train_clients_1.txt',
-      'train_clients_2.txt',
-      'train_clients_3.txt',
-      'train_clients_4.txt',
-      'train_clients_5.txt',
-      'test_clients.txt',
-      )
+    raw_files = ('db.sql3',)
     return [resource_filename(__name__, k) for k in raw_files]
+
 
   def version(self):
     import pkg_resources  # part of setuptools
     return pkg_resources.require('bob.db.%s' % self.name())[0].version
 
   def type(self):
-    return 'text'
+    return 'sqlite'
 
   def add_commands(self, parser):
     """Add specific subcommands that the action "dumplist" can use"""
@@ -98,6 +119,12 @@ class Interface(BaseInterface):
     from argparse import SUPPRESS
 
     db = Database()
+
+
+   # get the "create" action from a submodule
+    from .create import add_command as create_command
+    create_command(subparsers)
+
 
     # add the dumplist command
     dump_message = "Dumps list of files based on your criteria"
