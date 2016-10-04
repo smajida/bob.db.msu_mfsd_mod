@@ -17,10 +17,29 @@ import bob.io.image
 import bob.db.base
 import numpy as np
 
+
+#import Image as pyIm
+ 
+def imshow(image):
+  from matplotlib import pyplot as plt
+  if len(image.shape)==3:
+    #imshow() expects color image in a slightly different format, so first rearrange the 3d data for imshow...
+    outImg = image.tolist()
+#    print len(outImg)
+    result = np.dstack((outImg[0], outImg[1]))
+    outImg = np.dstack((result, outImg[2]))
+    plt.imshow((outImg*255.0).astype(np.uint8)) #[:,:,1], cmap=mpl.cm.gray)
+         
+  else:
+    if(len(image.shape)==2):
+      #display gray image.
+      plt.imshow(image.astype(np.uint8), cmap=matplotlib.cm.gray)
+             
+  plt.show()
+
+
 class MFSDDatabaseTest(unittest.TestCase):
   """Performs various tests on the MSU_MFSD spoofing attack database."""
-  
-  
   
   def test02_dumplist(self):
     from bob.db.base.script.dbmanage import main
@@ -91,42 +110,41 @@ class MFSDDatabaseTest(unittest.TestCase):
     self.assertEqual(thisobj.videofile('xxx'), 'xxx/attack/attack_client003_laptop_SD_ipad_video_scene01.mov')
     self.assertFalse(thisobj.is_real())
         
-#  def test06_check_rotation(self):
-#    filename = os.path.join('real', 'real_client003_android_SD_scene01')
-#    thisobj = File('03', '003', filename, 'real', 'mobile', None)
-#    self.assertTrue(thisobj.is_rotated())
-#
-#    filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
-#    thisobj = File('03', '003', filename, 'attack', 'laptop', 'video_hd')
-#    self.assertFalse(thisobj.is_rotated())
+  def test06_check_rotation(self):
+    filename = os.path.join('real', 'real_client003_android_SD_scene01')
+    thisobj = File('03', '003', filename, 'real', 'mobile', '', True)
+    print thisobj
+    self.assertTrue(thisobj.is_rotated())
 
-#  def test07_check_flip_on_load(self):
-##       dbfolder = 'bob/db/msu_mfsd_mod/test_images/'  #simulated db repo. containing only the 2 videos used in this test.
-##      dbfolder = pkg_resources.resource_filename('bob.db.msu_mfsd_mod','test_images')
-#      dbfolder = pkg_resources.resource_filename(__name__ , 'test_images')
-#      flipped_file = 'real_client005_android_SD_scene01'
-#      upright_file = 'real_client022_android_SD_scene01' #'real_client005_laptop_SD_scene01'
-#      #make sure the dbfolder and all files necessary exist.
-#      self.assertTrue(os.path.isdir(dbfolder))
-#      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5')))
-#      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client022_android_SD_scene01_frame0_correct.hdf5')))
-##      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_laptop_SD_scene01_frame0_correct.hdf5')))
-#      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_android_SD_scene01.mp4')))
-#      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client022_android_SD_scene01.mp4')))
-##      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_laptop_SD_scene01.mov')))
-#
-#      #test the 'rotated' file is correctly presented.
-#      file1 = os.path.join('real', flipped_file)
-#      thisobj = File(file1, 'real','test') 
-#      vin = thisobj.load(dbfolder)
-#      firstframe = vin[0]
-#      hf = bob.io.base.HDF5File(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5'), 'r')
-#      reference_frame1 = hf.read('color_frame')
-#      difsum1  = np.sum(np.fabs(firstframe - reference_frame1))
-##        print 'flipped video: SAD:', difsum1
-#      self.assertTrue(np.array_equal(firstframe, reference_frame1))
-#      #
-##       # test that 'not_rotated' files are also correctly presented.
+    filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
+    thisobj = File('03', '003', filename, 'attack', 'laptop', 'video_hd')
+    self.assertFalse(thisobj.is_rotated())
+
+  def test07_check_flip_on_load(self):
+#       dbfolder = 'bob/db/msu_mfsd_mod/test_images/'  #simulated db repo. containing only the 2 videos used in this test.
+#      dbfolder = pkg_resources.resource_filename('bob.db.msu_mfsd_mod','test_images')
+      dbfolder = pkg_resources.resource_filename(__name__ , 'test_images')
+      flipped_file = 'real_client005_android_SD_scene01'
+      upright_file = 'real_client022_android_SD_scene01' #'real_client005_laptop_SD_scene01'
+      #make sure the dbfolder and all files necessary exist.
+      self.assertTrue(os.path.isdir(dbfolder))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real_client022_android_SD_scene01_frame0_correct.hdf5')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client005_android_SD_scene01.mp4')))
+      self.assertTrue(os.path.exists(os.path.join(dbfolder, 'real/real_client022_android_SD_scene01.mp4')))
+
+      #test the 'rotated' file is correctly presented.
+      file1 = os.path.join('real', flipped_file)
+      thisobj = File('05', '005', file1, 'real','mobile', '',True) 
+      vin = thisobj.load(dbfolder)
+      firstframe = vin[0]
+      hf = bob.io.base.HDF5File(os.path.join(dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5'), 'r')
+      reference_frame1 = hf.read('color_frame')
+      difsum1  = np.sum(np.fabs(firstframe - reference_frame1))
+#        print 'flipped video: SAD:', difsum1
+      self.assertTrue(np.array_equal(firstframe, reference_frame1))
+      #
+#       # test that 'not_rotated' files are also correctly presented.
 ##THIS TEST IS SUPPRESSED FOR NOW BECAUSE IT DOESNOT RUN ON TRAVIS CORRECTLY.
 ##       file2= os.path.join('real', upright_file)
 ##       thisobj = File(file2, 'real','test') 

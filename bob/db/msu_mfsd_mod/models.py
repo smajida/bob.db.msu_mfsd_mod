@@ -301,6 +301,8 @@ class File(Base):
     else:
         vin =  bob.io.base.load(self.make_path(directory, extension))
 
+    print('is_rotated:')
+    print(self.is_rotated())
     if self.is_rotated():
         vin = vin[:, :, ::-1,:]
     

@@ -167,13 +167,16 @@ def add_files(session, real_fileList, attack_fileList, verbose=False):
 
   # process real-presentation files
   inpFile = os.path.join(os.getcwd(), real_fileList)
-  rotate = False
   idCounter = 0
   for fname in open(inpFile, 'rt'):
+    idCounter += 1
+    rotate = False
     pa = get_presentation_attributes(fname) #extracts presentation attributes by parsing fname: cId, file_stem, presentation, quality, instrument
 #    print(pa)
-    if pa[1] in rotate_list: rotate = True #pa[1] is the file_stem to be stored in the database
-    idCounter += 1
+    if pa[1] in rotate_list: 
+        rotate = True #pa[1] is the file_stem to be stored in the database
+    if rotate:
+        print(pa[1])
     session.add(File(idCounter, pa[0], pa[1], pa[2], pa[3], pa[4], rotate)) #(fId, client, path, presentation, quality, atype, rotation=False)
 
   #process attack-presentation files
