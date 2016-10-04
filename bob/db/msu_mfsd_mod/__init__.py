@@ -3,7 +3,7 @@
 # Andre Anjos <andre.dos.anjos@gmail.com>
 # Wed 18 May 09:28:44 2011
 
-"""The Replay-Attack Database accessors for Bob
+"""The msu_mfsd_mod face-spoof Database accessors for Bob
 """
 
 from .query import Database

@@ -180,8 +180,7 @@ class File(Base):
   def videofile(self, directory=None):
     """Returns the path to the database video file for this object
     Keyword parameters:
-    directory
-      An optional directory name that will be prefixed to the returned result.
+    directory: An optional directory name that will be prefixed to the returned result.
 
     Returns a string containing the video file path.
     """
@@ -202,8 +201,7 @@ class File(Base):
     """Returns the path to the companion face bounding-box file
 
     Keyword parameters:
-    directory
-      An optional directory name that will be prefixed to the returned result.
+    directory: An optional directory name that will be prefixed to the returned result.
 
     Returns a string containing the face file path.
     """
@@ -217,16 +215,12 @@ class File(Base):
     """Reads the file containing the face locations for the frames in the current video
 
     Keyword parameters:
-    directory
-      A directory name that will be prepended to the final filepaths where the
-      face bounding boxes are located, if not on the current directory.
+    directory: A directory name that will be prepended to the final filepaths where the face bounding boxes are located, if not on the current directory.
 
     Returns:
-      A :py:class:`numpy.ndarray` containing information about the located
-      faces in the videos. Each row of the :py:class:`numpy.ndarray`
-      corresponds for one frame. The five columns of the
-      :py:class:`numpy.ndarray` are (all integers):
-
+      A :py:class:`numpy.ndarray` containing information about the located faces in the videos. 
+      Each row of the :py:class:`numpy.ndarray` corresponds for one frame. 
+      The five columns of the :py:class:`numpy.ndarray` are (all integers):
       * Frame number (int)
       * Bounding box top-left X coordinate (int)
       * Bounding box top-left Y coordinate (int)
@@ -287,16 +281,11 @@ class File(Base):
     """Loads the data at the specified location and using the given extension.
 
     Keyword parameters:
-    data
-      The data blob to be saved (normally a :py:class:`numpy.ndarray`).
+    data: The data blob to be saved (normally a :py:class:`numpy.ndarray`).
 
-    directory
-      [optional] If not empty or None, this directory is prefixed to the final
-      file destination
+    directory: [optional] If not empty or None, this directory is prefixed to the final file destination
 
-    extension
-      [optional] The extension of the filename - this will control the type of
-      output and the codec for saving the input blob.
+    extension: [optional] The extension of the filename - this will control the type of output and the codec for saving the input blob.
     """
 
     if extension is None:
@@ -322,12 +311,9 @@ class File(Base):
     """Saves the input data at the specified location and using the given extension.
 
     Keyword parameters:
-    data
-      The data blob to be saved (normally a :py:class:`numpy.ndarray`).
-    directory
-      If specified (not empty and not None), this directory is prefixed to the final file destination
-    extension
-      The filename-extension - this determines the type of output and the codec for saving the input blob.
+    data: The data blob to be saved (normally a :py:class:`numpy.ndarray`).
+    directory: If specified (not empty and not None), this directory is prefixed to the final file destination 
+    extension: The filename-extension - this determines the type of output and the codec for saving the input blob.
     """
 
     path = self.make_path(directory, extension)
