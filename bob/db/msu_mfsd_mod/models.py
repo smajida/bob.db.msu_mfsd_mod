@@ -167,8 +167,15 @@ class File(Base):
 
   def get_quality(self):
     """Returns quality of the video recording as a string. Possible return-value: 'laptop', or 'mobile'."""    
-
     return self.quality
+
+  def get_instrument(self):
+    """Returns the attack-instrument (formerly, type) associated with the file-object. 
+    Return:
+    String, one of: 'video_hd', 'video_mobile', 'print', or None 
+    Returns None only when the presentation is 'real' 
+    """
+    return self.instrument
 
   def videofile(self, directory=None):
     """Returns the path to the database video file for this object
@@ -242,8 +249,8 @@ class File(Base):
        clients in the test set have IDs from 21 to 50.
     """
 
-    stem_file = self.filename.split('/')[1] # the file stem of the filename
-    stem_client = self.filename.split('_')[1] # the client stem of the filename
+    stem_file = self.path.split('/')[1] # the file stem of the filename
+    stem_client = self.path.split('_')[1] # the client stem of the filename
     return stem_client[-2:]
 
 

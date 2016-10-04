@@ -154,7 +154,6 @@ def add_files(session, real_fileList, attack_fileList, verbose=False):
      attack_fileList: text-file containing names of all video-files of attack-presentations (1 filename per line)
   """
   #load list of files that should be rotated
-#  rotFile = '/remote/idiap.svm/home.active/sbhatta/work/git/refactoring/bob.db.msu_mfsd_mod/bob/db/msu_mfsd_mod/rotated_videos/rotated_videos.txt'
   rotFile = 'bob/db/msu_mfsd_mod/rotated_videos/rotated_videos.txt'  
   rotFile = os.path.join(os.getcwd(), rotFile)
   if verbose: print("Rotation file: %s" %(rotFile))

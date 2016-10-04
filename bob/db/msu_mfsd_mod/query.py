@@ -74,7 +74,8 @@ class Database(Database):
 #                    protocol='grandtest', 
                     fold='fold1', 
                     group=Client.group_choices, 
-                    cls= File.presentation_choices):
+                    cls= File.presentation_choices,
+                    ids = []):
     """Returns a list of unique :py:class:`.File` objects for the specific query by the user.
 
     Keyword parameters:
@@ -106,6 +107,10 @@ class Database(Database):
       set to empty string, of the value None, its value is reset to the default.
       If desired, several folds may be specified together, as a tuple.
 
+    ids:
+      The id of the client whose videos need to be retrieved. Should be an integer number belonging this list: 
+      ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', 
+      '28', '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53]
 
 #    protocol --NOT USED FOR NOW. THIS COMMENT WILL BE REMOVED.
 #      The protocol for the attack. One of the ones returned by protocols(). If
@@ -114,6 +119,9 @@ class Database(Database):
 
     Returns: A list of :py:class:`.File` objects.
     """
+
+    self.ids = ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', '28', '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53', '54', '55'] # all the client IDs
+
 
     self.assert_validity()
 
@@ -161,6 +169,9 @@ class Database(Database):
     VALID_PRESENTATIONS = self.presentation_classes() #('real', 'attack')
     cls = check_validity(cls, "presentation", VALID_PRESENTATIONS, ('real', 'attack'))
 
+    # if ids is specified, check that they appear in the list of valid ids.
+    VALID_IDS = self.ids
+    ids = check_validity(ids, "id", VALID_IDS, VALID_IDS)
 
 #    # check protocol validity
 #    if not protocol:
@@ -178,11 +189,13 @@ class Database(Database):
 #    q = self.session.query(File, Client.id, Client.client_fold1).join(Client)
     q = self.session.query(File, Client).join(Client)
 
+    if ids:   #filter by id
+        q = q.filter(Client.id.in_(ids))
+
     if cls: #presentation: real or attack
       q = q.filter(File.cls.in_(cls))
 
     if fold=='fold1':
-
       q = q.filter(Client.client_fold1.in_(group))
     elif fold=='fold2':
       q = q.filter(Client.client_fold2.in_(group))
@@ -197,6 +210,9 @@ class Database(Database):
 
     if quality:
       q = q.filter(File.quality.in_(quality))
+
+    if instrument:
+      q = q.filter(File.instrument.in_(instrument))
 
 #    q = q.filter(Protocol.name.in_(protocol))
     q = q.order_by(File.cls.desc()).order_by(Client.id) # first order by 'real' or 'attack' (desc() puts the 'reals' first), 

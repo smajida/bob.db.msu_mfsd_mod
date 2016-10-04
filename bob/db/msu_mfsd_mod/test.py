@@ -45,56 +45,59 @@ class MFSDDatabaseTest(unittest.TestCase):
     fobj = db.objects(fold='fold1')
     self.assertEqual(len(fobj), 280) # number of all the videos in the database
 
-#    fobj = db.objects(group='train', ids=['01'])
-#    self.assertEqual(len(fobj), 0) # number of train videos for client '01' (fold 0)
-#       
+    fobj = db.objects(group='train', ids=['01'])
+    self.assertEqual(len(fobj), 0) # number of train videos for client '01' (fold 0)
+       
 #    fobj = db.objects(group='test', ids=['01'])
+#    for f in fobj: print(f)
 #    self.assertEqual(len(fobj), 8) # number of train videos for client '01' (fold 0)
-#
-#    fobj = db.objects(group='devel', ids=['01'], fold_no=1)
-#    self.assertEqual(len(fobj), 8) # number of devel videos for client '01' (fold 1)
-#     
-#    fobj = db.objects(group='devel', ids=['55'], fold_no=1)
-#    self.assertEqual(len(fobj), 0) # number of devel videos for client '55' (fold 1)
-#    
-#    fobj = db.objects(group='train', fold_no=1, cls='real')
-#    self.assertEqual(len(fobj), 20) # number of real train videos
-#
-#    fobj = db.objects(group='devel', fold_no=1, cls='attack')
-#    self.assertEqual(len(fobj), 60) # number of attack devel videos
-#
-#    fobj = db.objects(group='train', fold_no=1, cls='attack', types='video_mobile')
-#    self.assertEqual(len(fobj), 20) # number of video_mobile attack devel videos
-#
-#    fobj = db.objects(group='test', fold_no=1, cls='attack', types='print', qualities='mobile')
-#    self.assertEqual(len(fobj), 15) # number of print attack test videos recorded with mobile
-#
-#    filename = os.path.join('real', 'real_client001_android_SD_scene01')
-#    thisobj = File(filename, 'real', 'test')
-#    self.assertEqual(thisobj.get_client_id(), '01')
-#    self.assertEqual(thisobj.get_type(), None)
-#    self.assertEqual(thisobj.get_quality(), 'mobile')
-#
-#    self.assertEqual(thisobj.videofile('xxx'), 'xxx/real/real_client001_android_SD_scene01.mp4')
-#    self.assertTrue(thisobj.is_real())
-#
-#    filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
-#    thisobj = File(filename, 'attack', 'test')
-#    self.assertEqual(thisobj.get_client_id(), '03')
-#    self.assertEqual(thisobj.get_type(), 'video_hd')
-#    self.assertEqual(thisobj.get_quality(), 'laptop')
-#
-#    self.assertEqual(thisobj.make_path('xxx','.mov'), 'xxx/attack/attack_client003_laptop_SD_ipad_video_scene01.mov')
-#    self.assertEqual(thisobj.videofile('xxx'), 'xxx/attack/attack_client003_laptop_SD_ipad_video_scene01.mov')
-#    self.assertFalse(thisobj.is_real())
+
+    fobj = db.objects(group='devel', ids=['01'], fold='fold1')
+    self.assertEqual(len(fobj), 8) # number of devel videos for client '01' (fold 1)
+     
+    fobj = db.objects(group='devel', ids=['55'], fold='fold1')
+    self.assertEqual(len(fobj), 0) # number of devel videos for client '55' (fold 1)
+    
+    fobj = db.objects(group='train', fold='fold1', cls='real')
+    self.assertEqual(len(fobj), 20) # number of real train videos
+
+    fobj = db.objects(group='devel', fold='fold1', cls='attack')
+    self.assertEqual(len(fobj), 60) # number of attack devel videos
+
+    fobj = db.objects(group='train', fold='fold1', cls='attack', instrument='video_mobile')
+#    for f in fobj: print(f)
+    self.assertEqual(len(fobj), 20) # number of video_mobile attack train videos
+
+    fobj = db.objects(group='test', fold='fold1', cls='attack', instrument='print', quality='mobile')
+    self.assertEqual(len(fobj), 15) # number of print attack test videos recorded with mobile
+
+    filename = os.path.join('real', 'real_client001_android_SD_scene01')
+#    self, fId, client, path, presentation, quality, atype, rotation=False
+    thisobj = File('01', '001', filename, 'real', 'mobile', None)
+    self.assertEqual(thisobj.get_client_id(), '01')
+    self.assertEqual(thisobj.get_instrument(), None)
+    self.assertEqual(thisobj.get_quality(), 'mobile')
+
+    self.assertEqual(thisobj.videofile('xxx'), 'xxx/real/real_client001_android_SD_scene01.mp4')
+    self.assertTrue(thisobj.is_real())
+
+    filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
+    thisobj = File('03', '003', filename, 'attack', 'laptop', 'video_hd')
+    self.assertEqual(thisobj.get_client_id(), '03')
+    self.assertEqual(thisobj.get_instrument(), 'video_hd')
+    self.assertEqual(thisobj.get_quality(), 'laptop')
+
+    self.assertEqual(thisobj.make_path('xxx','.mov'), 'xxx/attack/attack_client003_laptop_SD_ipad_video_scene01.mov')
+    self.assertEqual(thisobj.videofile('xxx'), 'xxx/attack/attack_client003_laptop_SD_ipad_video_scene01.mov')
+    self.assertFalse(thisobj.is_real())
         
 #  def test06_check_rotation(self):
 #    filename = os.path.join('real', 'real_client003_android_SD_scene01')
-#    thisobj = File(filename, 'real', 'test')
+#    thisobj = File('03', '003', filename, 'real', 'mobile', None)
 #    self.assertTrue(thisobj.is_rotated())
 #
 #    filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
-#    thisobj = File(filename, 'attack', 'test')
+#    thisobj = File('03', '003', filename, 'attack', 'laptop', 'video_hd')
 #    self.assertFalse(thisobj.is_rotated())
 
 #  def test07_check_flip_on_load(self):
