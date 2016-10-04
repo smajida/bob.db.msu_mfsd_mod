@@ -113,7 +113,6 @@ class MFSDDatabaseTest(unittest.TestCase):
   def test06_check_rotation(self):
     filename = os.path.join('real', 'real_client003_android_SD_scene01')
     thisobj = File('03', '003', filename, 'real', 'mobile', '', True)
-    print thisobj
     self.assertTrue(thisobj.is_rotated())
 
     filename = os.path.join('attack', 'attack_client003_laptop_SD_ipad_video_scene01')
