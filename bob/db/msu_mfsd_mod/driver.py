@@ -36,7 +36,6 @@ def dumplist(args):
     output = null()
 
   for obj in objects:
-    print obj
     output.write('%s\n' % (obj.make_path(directory=args.directory, extension=args.extension),))
 
   return 0
