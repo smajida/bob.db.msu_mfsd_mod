@@ -45,6 +45,7 @@ def checkfiles(args):
   """Checks the existence of the files based on your criteria"""
 
   #from .__init__ import Database
+  from .query import Database
   db = Database()
 
   #objects = db.objects(groups=args.group, cls=args.cls, qualities=args.quality, types=args.attack_type)

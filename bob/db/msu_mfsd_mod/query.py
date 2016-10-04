@@ -133,7 +133,7 @@ class Database(Database):
       if not f:
         return default
       elif isinstance(f, string_types):
-	if f not in valid:
+        if f not in valid:
           raise RuntimeError('Invalid fold-parameter: "%s". Valid values are *exactly one* of the strings: %s' % (f, valid))
       else:
         raise RuntimeError('Invalid type for fold-parameter: "%s". It should be a single string from the set: %s.' % (f, valid))
