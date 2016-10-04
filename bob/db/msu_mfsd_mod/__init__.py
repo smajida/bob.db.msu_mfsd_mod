@@ -7,7 +7,7 @@
 """
 
 from .query import Database
-from .models import Client, File, Protocol, RealAccess, Attack
+from .models import Client, File
 
 def get_config():
   """Returns a string containing the configuration information.
