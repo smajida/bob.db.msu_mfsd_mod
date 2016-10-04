@@ -29,12 +29,12 @@ def get_presentation_attributes(filename):
     file_stem = folder+'/'+filebase
 
     presentation = nameparts[0]
-    if presentation <> 'attack' and presentation <> 'real':
+    if presentation != 'attack' and presentation != 'real':
         assert False, 'Wrong presentation type.'
     
     cId = int((nameparts[1])[-3:])  #client-id extracted from filename.
     quality = nameparts[2]
-    if quality <> 'laptop' and quality <> 'android':
+    if quality != 'laptop' and quality != 'android':
         assert False, 'Wrong quality type.'
     if quality == 'android':
         quality = 'mobile'
