@@ -22,10 +22,10 @@ class MFSDDatabaseTest(unittest.TestCase):
   
   
   
-#  def test02_dumplist(self):
-#    from bob.db.base.script.dbmanage import main
-#    self.assertEqual(main('msu_mfsd_mod dumplist --self-test'.split()), 0)
-#
+  def test02_dumplist(self):
+    from bob.db.base.script.dbmanage import main
+    self.assertEqual(main('msu_mfsd_mod dumplist --self-test'.split()), 0)
+
 #  def test03_checkfiles(self):
 #    from bob.db.base.script.dbmanage import main
 #    self.assertEqual(main('msu_mfsd_mod checkfiles --self-test'.split()), 0)

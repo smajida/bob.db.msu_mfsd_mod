@@ -14,7 +14,6 @@
 import os
 import sys
 from bob.db.base.driver import Interface as BaseInterface
-from .query import Database
 
 
 # Driver API
@@ -24,9 +23,12 @@ def dumplist(args):
   """Dumps lists of files based on your criteria"""
 
   #from .__init__ import Database
+  from .query import Database
   db = Database()
 
-  objects = db.objects(groups=args.group, cls=args.cls, qualities=args.quality, types=args.attack_type)
+# objects = db.objects(group=args.group, cls=args.cls, quality=args.quality, types=args.attack_type)
+  objects = db.objects(quality=args.quality, instrument=args.attack_type, fold=args.fold, group=args.group, cls=args.cls)
+
 
   output = sys.stdout
   if args.selftest:
@@ -34,6 +36,7 @@ def dumplist(args):
     output = null()
 
   for obj in objects:
+    print obj
     output.write('%s\n' % (obj.make_path(directory=args.directory, extension=args.extension),))
 
   return 0
@@ -44,7 +47,8 @@ def checkfiles(args):
   #from .__init__ import Database
   db = Database()
 
-  objects = db.objects(groups=args.group, cls=args.cls, qualities=args.quality, types=args.attack_type)
+  #objects = db.objects(groups=args.group, cls=args.cls, qualities=args.quality, types=args.attack_type)
+  objects = db.objects(quality=args.quality, instrument=args.attack_type, fold=args.fold, group=args.group, cls=args.cls)
 
   # go through all files, check if they are available on the filesystem
   good = []
@@ -118,6 +122,7 @@ class Interface(BaseInterface):
 
     from argparse import SUPPRESS
 
+    from .query import Database
     db = Database()
 
 
@@ -131,10 +136,13 @@ class Interface(BaseInterface):
     dump_parser = subparsers.add_parser('dumplist', help=dump_message)
     dump_parser.add_argument('-d', '--directory', dest="directory", default='', help="if given, this path will be prepended to every entry returned (defaults to '%(default)s')")
     dump_parser.add_argument('-e', '--extension', dest="extension", default='', help="if given, this extension will be appended to every entry returned (defaults to '%(default)s')")
-    dump_parser.add_argument('-c', '--class', dest="cls", default=None, help="if given, limits the dump to a particular subset of the data that corresponds to the given class (defaults to '%(default)s')", choices=db.classes)
-    dump_parser.add_argument('-g', '--group', dest="group", default=None, help="if given, this value will limit the output files to those belonging to a particular group. (defaults to '%(default)s')", choices=db.groups)
-    dump_parser.add_argument('-q', '--quality', dest="quality", default=None, help="if given, this value will limit the output files to those belonging to a particular quality of recording. (defaults to '%(default)s')", choices=db.qualities)
-    dump_parser.add_argument('-t', '--type', dest="attack_type", default=None, help="if given, this value will limit the output files to those belonging to a particular type of attack. (defaults to '%(default)s')", choices=db.types)
+
+    dump_parser.add_argument('-c', '--class', dest="cls", default=None, help="if given, limits the dump to a particular subset of the data that corresponds to the given class (defaults to '%(default)s')", choices=db.presentation_classes())
+    dump_parser.add_argument('-f', '--fold', dest="fold", default=None, help="if given, limits the dump to a particular subset of the data that corresponds to the given fold (defaults to '%(default)s')", choices=db.folds())
+    dump_parser.add_argument('-g', '--group', dest="group", default=None, help="if given, this value will limit the output files to those belonging to a particular group. (defaults to '%(default)s')", choices=db.groups())
+    dump_parser.add_argument('-q', '--quality', dest="quality", default=None, help="if given, this value will limit the output files to those belonging to a particular quality of recording. (defaults to '%(default)s')", choices=db.qualities())
+    dump_parser.add_argument('-t', '--type', dest="attack_type", default=None, help="if given, this value will limit the output files to those belonging to a particular type of attack. (defaults to '%(default)s')", choices=db.attack_instruments())
+
     dump_parser.add_argument('--self-test', dest="selftest", default=False, action='store_true', help=SUPPRESS)
     dump_parser.set_defaults(func=dumplist) #action
 
@@ -143,9 +151,15 @@ class Interface(BaseInterface):
     check_parser = subparsers.add_parser('checkfiles', help=check_message)
     check_parser.add_argument('-d', '--directory', dest="directory", default='', help="if given, this path will be prepended to every entry returned (defaults to '%(default)s')")
     check_parser.add_argument('-e', '--extension', dest="extension", default='', help="if given, this extension will be appended to every entry returned (defaults to '%(default)s')")
-    check_parser.add_argument('-c', '--class', dest="cls", default=None, help="if given, limits the dump to a particular subset of the data that corresponds to the given class (defaults to '%(default)s')", choices=db.classes)
-    check_parser.add_argument('-g', '--group', dest="group", default=None, help="if given, this value will limit the output files to those belonging to a particular group. (defaults to '%(default)s')", choices=db.groups)
-    check_parser.add_argument('-q', '--quality', dest="quality", default=None, help="if given, this value will limit the output files to those belonging to a particular quality of recording. (defaults to '%(default)s')", choices=db.qualities)
-    check_parser.add_argument('-t', '--type', dest="attack_type", default=None, help="if given, this value will limit the output files to those belonging to a particular type of attack. (defaults to '%(default)s')", choices=db.types)
+
+    check_parser.add_argument('-c', '--class', dest="cls", default=None, help="if given, limits the dump to a particular subset of the data that corresponds to the given class (defaults to '%(default)s')", choices=db.presentation_classes())
+    check_parser.add_argument('-f', '--fold', dest="fold", default=None, help="if given, this value will limit the output files to those belonging to a particular fold. (defaults to '%(default)s')", choices=db.folds())
+    check_parser.add_argument('-g', '--group', dest="group", default=None, help="if given, this value will limit the output files to those belonging to a particular group. (defaults to '%(default)s')", choices=db.groups())
+    check_parser.add_argument('-q', '--quality', dest="quality", default=None, help="if given, this value will limit the output files to those belonging to a particular quality of recording. (defaults to '%(default)s')", choices=db.qualities())
+    check_parser.add_argument('-t', '--type', dest="attack_type", default=None, help="if given, this value will limit the output files to those belonging to a particular type of attack. (defaults to '%(default)s')", choices=db.attack_instruments())
+
     check_parser.add_argument('--self-test', dest="selftest", default=False, action='store_true', help=SUPPRESS)
     check_parser.set_defaults(func=checkfiles) #action
+
+
+

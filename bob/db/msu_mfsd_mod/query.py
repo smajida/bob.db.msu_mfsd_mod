@@ -48,7 +48,7 @@ class Database(Database):
   def connect(self):
     """Tries connecting or re-connecting to the database"""
     
-    print(SQLITE_FILE)
+    #print(SQLITE_FILE)
     
     if not os.path.exists(SQLITE_FILE):
       self.session = None
@@ -158,7 +158,7 @@ class Database(Database):
     group = check_validity(group, "group", VALID_GROUPS, VALID_GROUPS)
 
     # by default, do NOT grab enrollment data from the database
-    VALID_PRESENTATIONS = self.presentation_class() #('real', 'attack')
+    VALID_PRESENTATIONS = self.presentation_classes() #('real', 'attack')
     cls = check_validity(cls, "presentation", VALID_PRESENTATIONS, ('real', 'attack'))
 
 
@@ -175,7 +175,8 @@ class Database(Database):
     # now query the database
     retval = []
 
-    q = self.session.query(File, Client.id, Client.client_fold1).join(Client)
+#    q = self.session.query(File, Client.id, Client.client_fold1).join(Client)
+    q = self.session.query(File, Client).join(Client)
 
     if cls: #presentation: real or attack
       q = q.filter(File.cls.in_(cls))
@@ -202,7 +203,16 @@ class Database(Database):
 							# and within each presentation, order by client-Id.
     retval = list(q)
 
-    return retval
+    files = []
+    for r in retval:
+        f = r[0]
+        c = r[1]
+
+        f.client_id = c.id
+        f.client_fold = c.client_fold1
+        files.append(f)
+
+    return files
 
 #  def files(self, directory=None, extension=None, **object_query):
 #    """Returns a set of filenames for the specific query by the user.
@@ -285,7 +295,7 @@ class Database(Database):
     """Returns attack devices available in the database"""
     return File.instrument_choices
 
-  def presentation_class(self):
+  def presentation_classes(self):
     """Returns the kinds of presentation (real or attack) available in the database"""
     return File.presentation_choices
 

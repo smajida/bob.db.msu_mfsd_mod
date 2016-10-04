@@ -34,14 +34,14 @@ class Client(Base):
   fold_choices  = ('fold1', 'fold2', 'fold3', 'fold4', 'fold5')
 
 
-  fold1_choices = ('train', 'devel', 'test')
+  fold1_choices = group_choices #('train', 'devel', 'test')
   """Possible groups to which clients may belong to"""
-  fold2_choices = ('train', 'devel', 'test')
-  fold3_choices = ('train', 'devel', 'test')
-  fold4_choices = ('train', 'devel', 'test')
-  fold5_choices = ('train', 'devel', 'test')
+  fold2_choices = group_choices #('train', 'devel', 'test')
+  fold3_choices = group_choices #('train', 'devel', 'test')
+  fold4_choices = group_choices #('train', 'devel', 'test')
+  fold5_choices = group_choices #('train', 'devel', 'test')
 
-  group_choices = ('train', 'devel', 'test')
+  #group_choices = ('train', 'devel', 'test')
 
   id = Column(Integer, primary_key=True)
   """Key identifier for clients"""
