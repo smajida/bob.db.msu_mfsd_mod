@@ -159,7 +159,7 @@ def add_files(session, real_fileList, attack_fileList, verbose=False):
   if verbose: print("Rotation file: %s" %(rotFile))
 
 
-  rotate_list= []
+  rotate_list= []  #read the rotFile and append filenames of files to be rotated to this list
   for fn in open(rotFile, 'rt'):
     rotate_list.append(fn.strip())
 
