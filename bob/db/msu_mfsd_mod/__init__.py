@@ -3,12 +3,11 @@
 # Andre Anjos <andre.dos.anjos@gmail.com>
 # Wed 18 May 09:28:44 2011
 
-"""The Msu-Mfsd_Mod Database accessors for Bob
+"""The msu_mfsd_mod face-spoof Database accessors for Bob
 """
 
 from .query import Database
-from .models import Client, File #, Protocol, RealAccess, Attack
-from . import spoofing
+from .models import Client, File
 
 def get_config():
   """Returns a string containing the configuration information.

@@ -3,7 +3,12 @@
 # Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
 #Tue 10 Mar 16:07:27 CET 2015
 
-from setuptools import setup, find_packages
+#from setuptools import setup, find_packages
+from setuptools import setup, find_packages, dist
+dist.Distribution(dict(setup_requires=['bob.extension']))
+
+from bob.extension.utils import load_requirements
+install_requires = load_requirements()
 
 # Define package version
 version = open("version.txt").read().rstrip()
@@ -26,14 +31,13 @@ setup(
     include_package_data=True,
     zip_safe=False,
 
-
-
-    install_requires=[
-      'setuptools',
-      'six',
-      'bob.db.base',
-      'antispoofing.utils',
-    ],
+    install_requires = install_requires,
+#    install_requires=[
+#      'setuptools',
+#      'six',
+#      'bob.db.base',
+#      'antispoofing.utils',
+#    ],
 
     entry_points={
 
@@ -42,14 +46,10 @@ setup(
         'msu_mfsd_mod = bob.db.msu_mfsd_mod.driver:Interface',
       ],
 
-      # antispoofing database declaration
-      'antispoofing.utils.db': [
-        'msu_mfsd_mod = bob.db.msu_mfsd_mod.spoofing:Database',
-      ],
 
-      'console_scripts': [
-        'testme.py = bob.db.msu_mfsd_mod.testme:main',
-      ],
+#      'console_scripts': [
+#        'testme.py = bob.db.msu_mfsd_mod.testme:main',
+#      ],
     },
 
     classifiers = [

@@ -10,15 +10,3 @@ Basic database interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: bob.db.msu_mfsd_mod
-   :members:
-
-.. automodule:: bob.db.msu_mfsd_mod.models
-   :members:
-
-Spoofing database using antispoofing.utils_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: bob.db.msu_mfsd_mod.spoofing
-   :members:
-
-.. _antispoofing.utils: https://pypi.python.org/pypi/antispoofing.utils
