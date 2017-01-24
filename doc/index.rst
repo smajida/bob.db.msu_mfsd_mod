@@ -4,14 +4,22 @@
 
 .. _bob.db.msu_mfsd_mod:
 
-=================================
-MSU Mobile Face Spoofing Database
-=================================
+=============================================
+MSU Mobile Face Presentation Attack Database
+=============================================
 
 .. todolist::
 
-.. todo::
-   upload this documentation to PythonHosted.org
+The MSU-MFSD is a presentation attack database which consists of printed
+attacks, as well as replay attacks recorded with mobile phones and tablets. The
+acquisition devices were laptops and Android phones.
+
+The actual raw data for `MSU MFSD`_ database should be downloaded from the
+original URL.
+
+Reference::
+
+  D. Wen, A. K. Jain and H. Han: "Face Spoof Detection with Image Distortion Analysis", In IEEE Trans. Information Forensic and Security, 2015.
 
 Documentation
 -------------
@@ -29,3 +37,5 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. _bob: https://www.idiap.ch/software/bob
+.. _msu mfsd: http://www.cse.msu.edu/rgroups/biometrics/Publications/Databases/MSUMobileFaceSpoofing/index.htm

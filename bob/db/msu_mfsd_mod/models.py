@@ -1,23 +1,17 @@
 #!/usr/bin/env python
-#Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
-#Mon 16 Mar 12:49:23 CET 2015
+# Sushil Bhattacharjee <sushil.bhattacharjee@idiap.ch>
+# Mon 16 Mar 12:49:23 CET 2015
 
-#import os
-#import bob.io.base
-#import bob.io.video
-#import bob.db.base
-#import numpy
-
-#from replay::models.py
+# from replay::models.py
 import os
-from sqlalchemy import Table, Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from bob.db.base.sqlalchemy_migration import Enum, relationship
 import bob.db.base.utils
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.declarative import declarative_base
 import numpy
-import bob
 import bob.io.video
+from bob.db.base import File as BaseFile
 
 
 Base = declarative_base()
@@ -31,17 +25,16 @@ class Client(Base):
 
   #  NOTE: the following 2 '_choices' tuples are only for information; they are not directly used for adding fields to the client-Table.
   group_choices = ('train', 'devel', 'test')
-  fold_choices  = ('fold1', 'fold2', 'fold3', 'fold4', 'fold5')
+  fold_choices = ('fold1', 'fold2', 'fold3', 'fold4', 'fold5')
 
-
-  fold1_choices = group_choices #('train', 'devel', 'test')
+  fold1_choices = group_choices  # ('train', 'devel', 'test')
   """Possible groups to which clients may belong to"""
-  fold2_choices = group_choices #('train', 'devel', 'test')
-  fold3_choices = group_choices #('train', 'devel', 'test')
-  fold4_choices = group_choices #('train', 'devel', 'test')
-  fold5_choices = group_choices #('train', 'devel', 'test')
+  fold2_choices = group_choices  # ('train', 'devel', 'test')
+  fold3_choices = group_choices  # ('train', 'devel', 'test')
+  fold4_choices = group_choices  # ('train', 'devel', 'test')
+  fold5_choices = group_choices  # ('train', 'devel', 'test')
 
-  #group_choices = ('train', 'devel', 'test')
+  # group_choices = ('train', 'devel', 'test')
 
   id = Column(Integer, primary_key=True)
   """Key identifier for clients"""
@@ -71,11 +64,10 @@ class Client(Base):
 
   def __repr__(self):
     return "<Client('%s', '%s', '%s', '%s', '%s', '%s')>" % (self.id, self.client_fold1, self.client_fold2, self.client_fold3, self.client_fold4, self.client_fold5)
-#return "<Client(Id:'%s', Fold1:'%s', Fold2:'%s', Fold3:'%s', Fold4:'%s', Fold5:'%s')>" % (self.id, self.client_fold1, self.client_fold2, self.client_fold3, self.client_fold4, self.client_fold5)
+# return "<Client(Id:'%s', Fold1:'%s', Fold2:'%s', Fold3:'%s', Fold4:'%s', Fold5:'%s')>" % (self.id, self.client_fold1, self.client_fold2, self.client_fold3, self.client_fold4, self.client_fold5)
 
 
-
-class File(Base):
+class File(Base, BaseFile):
   """Generic file container"""
 
   __tablename__ = 'file'
@@ -96,24 +88,23 @@ class File(Base):
   id = Column(Integer, primary_key=True)
   """Key identifier for files"""
 
-  client_id = Column(Integer, ForeignKey('client.id'))  
+  client_id = Column(Integer, ForeignKey('client.id'))
   """The client identifier to which this file is bound to"""
 
   path = Column(String(200), unique=True)
   """The (unique) path to this file inside the database"""
 
-  cls = Column(Enum(*presentation_choices))  #Presentation-type variable name 'cls' used for legacy reasons
+  cls = Column(Enum(*presentation_choices))  # Presentation-type variable name 'cls' used for legacy reasons
   """presentation-class: real or attack"""
 
-  rotate = Column(Boolean, unique=False, default=False) #Column(Enum(*rotation_choices), unique=False)
+  rotate = Column(Boolean, unique=False, default=False)  # Column(Enum(*rotation_choices), unique=False)
   """ To rotate or not to rotate..."""
 
-  quality = Column(Enum(*quality_choices), unique=False) 
+  quality = Column(Enum(*quality_choices), unique=False)
   """Quality of device used to acquire video"""
 
   instrument = Column(Enum(*instrument_choices), unique=False)
-  """Attack-type""" 
-
+  """Attack-type"""
 
   # for Python
   client = relationship(Client, backref=backref('files', order_by=id))
@@ -129,17 +120,16 @@ class File(Base):
        atype: string specifying 'video_hd', 'video_mobile', or 'print'
        rotation: bool: True if the file should be rotated upon load, otherwise False.
     """
-    self.id = fId
-    self.client_id = client	# clientId
-    self.path = path		# file-stem with relative-path.
-    self.cls = presentation 	# real or attack
-    self.quality = quality	# laptop or mobile
-    self.instrument = atype	# video_hd, video_mobile, or print
-    self.rotate = rotation	# True or False
+    BaseFile.__init__(self, path, fId)
+    self.client_id = client  # clientId
+    self.cls = presentation   # real or attack
+    self.quality = quality  # laptop or mobile
+    self.instrument = atype  # video_hd, video_mobile, or print
+    self.rotate = rotation  # True or False
 
   def __repr__(self):
     return "<File('%s', '%s', '%s', '%s', '%s', '%s', '%s', )>" % (self.id, self.client_id, self.path, self.cls, self.quality, self.instrument, self.rotate)
-#return "<File(FileId:'%s', ClientId:'%s', FilePath:'%s', Presentation:'%s', Quality:'%s', AttackInstrument:'%s', Rotate:'%s', )>" % (self.id, self.client_id, self.path, self.cls, self.quality, self.instrument, self.rotate)
+# return "<File(FileId:'%s', ClientId:'%s', FilePath:'%s', Presentation:'%s', Quality:'%s', AttackInstrument:'%s', Rotate:'%s', )>" % (self.id, self.client_id, self.path, self.cls, self.quality, self.instrument, self.rotate)
 
   def make_path(self, directory=None, extension=None):
     """Wraps the current path so that a complete path is formed
@@ -163,10 +153,9 @@ class File(Base):
       extension = ''
 
     return str(os.path.join(directory, self.path + extension))
-    
 
   def get_quality(self):
-    """Returns quality of the video recording as a string. Possible return-value: 'laptop', or 'mobile'."""    
+    """Returns quality of the video recording as a string. Possible return-value: 'laptop', or 'mobile'."""
     return self.quality
 
   def get_instrument(self):
@@ -187,15 +176,13 @@ class File(Base):
 
     if self.get_quality() == 'laptop':
       return self.make_path(directory, '.mov')
-    else:  
+    else:
       return self.make_path(directory, '.mp4')
-
 
   def get_file(self, pc):
     '''Returns the full file path given the path components pc'''
     from pkg_resources import resource_filename
     return resource_filename(__name__, os.path.join(pc))
-
 
   def facefile(self, directory=''):
     """Returns the path to the companion face bounding-box file
@@ -206,10 +193,8 @@ class File(Base):
     Returns a string containing the face file path.
     """
     if not directory:
-      directory = self.get_file('face-locations') # 'face-locations'
+      directory = self.get_file('face-locations')  # 'face-locations'
     return self.make_path(directory, '.face')
-
-
 
   def bbx(self, directory=None):
     """Reads the file containing the face locations for the frames in the current video
@@ -230,23 +215,21 @@ class File(Base):
       Note that **not** all the frames may contain detected faces.
     """
 
-    coords = numpy.loadtxt(self.facefile(directory), dtype=int, delimiter=',', usecols=range(0,5)) # reads all the locations as integers
-    for i in range(0,coords.shape[0]):
-      coords[i,3] = coords[i,3] - coords[i,1]
-      coords[i,4] = coords[i,4] - coords[i,2]
+    coords = numpy.loadtxt(self.facefile(directory), dtype=int, delimiter=',', usecols=range(0, 5))  # reads all the locations as integers
+    for i in range(0, coords.shape[0]):
+      coords[i, 3] = coords[i, 3] - coords[i, 1]
+      coords[i, 4] = coords[i, 4] - coords[i, 2]
 
     return coords
-
 
   def get_client_id(self):
     """The ID of the client. Value from 1 to 50. Clients in the train and devel set may have IDs from 1 to 20; 
        clients in the test set have IDs from 21 to 50.
     """
 
-    stem_file = self.path.split('/')[1] # the file stem of the filename
-    stem_client = self.path.split('_')[1] # the client stem of the filename
+    stem_file = self.path.split('/')[1]  # the file stem of the filename
+    stem_client = self.path.split('_')[1]  # the client stem of the filename
     return stem_client[-2:]
-
 
   def is_real(self):
     """Returns True if this file belongs to a real access, False otherwise"""
@@ -264,18 +247,16 @@ class File(Base):
 #      raise RuntimeError("%s is not an attack" % self)
 #    return self.attack[0]
 
-
   def is_rotated(self):
     """True if the video file is originally recorded rotated by 180 degrees, False otherwise """
 
 #    infilename = self.get_file(os.path.join('rotated_videos', 'rotated_videos.txt'))
 #    f = open(infilename)
-#    rotated_videos = f.readlines(); 
+#    rotated_videos = f.readlines();
 #    rotated_videos = [x[:-1] for x in rotated_videos] # removing the newline chars from the read lines
 #    return bool(self.make_path() in rotated_videos)
 
-    return self.rotate #True or False stored in this field
-
+    return self.rotate  # True or False stored in this field
 
   def load(self, directory=None, extension=None):
     """Loads the data at the specified location and using the given extension.
@@ -299,15 +280,14 @@ class File(Base):
         video = bob.io.video.reader(vfilename)
         vin = video.load()
     else:
-        vin =  bob.io.base.load(self.make_path(directory, extension))
+        vin = bob.io.base.load(self.make_path(directory, extension))
 
     print('is_rotated:')
     print(self.is_rotated())
     if self.is_rotated():
-        vin = vin[:, :, ::-1,:]
-    
-    return vin
+        vin = vin[:, :, ::-1, :]
 
+    return vin
 
   def save(self, data, directory=None, extension='.hdf5'):
     """Saves the input data at the specified location and using the given extension.
@@ -323,7 +303,6 @@ class File(Base):
     bob.io.base.save(data, path)
 
 
-
 # # Intermediate mapping from RealAccess's to Protocol's
 # realaccesses_protocols = Table('realaccesses_protocols', Base.metadata,
 #                                Column('realaccess_id', Integer, ForeignKey('realaccess.id')),
@@ -337,31 +316,19 @@ class File(Base):
 #                           )
 
 
-
 # class Protocol(Base):
 #   """MSU_MFSD protocol"""
-# 
+#
 #   __tablename__ = 'protocol'
-# 
+#
 #   id = Column(Integer, primary_key=True)
 #   """Unique identifier for the protocol (integer)"""
-# 
+#
 #   name = Column(String(20), unique=True)
 #   """Protocol name"""
 
 #   def __init__(self, name):
 #     self.name = name
-# 
+#
 #   def __repr__(self):
 #     return "Protocol('%s')" % (self.name,)
-
-
-
-
-
-
-
-
-
-
-
