@@ -7,9 +7,8 @@
 replay attack database in the most obvious ways.
 """
 
-import os
-from bob.db.base import utils, Database
-from .models import *
+from bob.db.base import SQLiteDatabase
+from .models import File, Client
 from .driver import Interface
 from six import string_types
 
@@ -19,7 +18,7 @@ INFO = Interface()
 SQLITE_FILE = INFO.files()[0]
 
 
-class Database(Database):
+class Database(SQLiteDatabase):
   """The dataset class opens and maintains a connection opened to the Database.
 
   It provides many different ways to probe for the characteristics of the data
@@ -28,54 +27,15 @@ class Database(Database):
 
   def __init__(self):
     # opens a session to the database - keep it open until the end
-    self.connect()
-    super(Database, self).__init__()
+    super(Database, self).__init__(SQLITE_FILE, File)
 
-  def __del__(self):
-    """Releases the opened file descriptor"""
-    if self.session:
-      try:
-        # Since the dispose function re-creates a pool
-        #   which might fail in some conditions, e.g., when this destructor is called during the exit of the python interpreter
-        self.session.close()
-        self.session.bind.dispose()
-      except TypeError:
-        # ... I can just ignore the according exception...
-        pass
-      except AttributeError:
-        pass
-
-  def connect(self):
-    """Tries connecting or re-connecting to the database"""
-    
-    #print(SQLITE_FILE)
-    
-    if not os.path.exists(SQLITE_FILE):
-      self.session = None
-
-    else:
-      self.session = utils.session_try_readonly(INFO.type(), SQLITE_FILE)
-
-  def is_valid(self):
-    """Returns if a valid session has been opened for reading the database"""
-
-    return self.session is not None
-
-  def assert_validity(self):
-    """Raise a RuntimeError if the database backend is not available"""
-
-    if not self.is_valid():
-      raise RuntimeError("Database '%s' cannot be found at expected location '%s'. Create it and then try re-connecting using Database.connect()" % (INFO.name(), SQLITE_FILE))
-
-
-
-  def objects(self, quality=File.quality_choices, 
-                    instrument=File.instrument_choices,
-#                    protocol='grandtest', 
-                    fold='fold1', 
-                    group=Client.group_choices, 
-                    cls= File.presentation_choices,
-                    ids = []):
+  def objects(self, quality=File.quality_choices,
+              instrument=File.instrument_choices,
+              #                    protocol='grandtest',
+              fold='fold1',
+              group=Client.group_choices,
+              cls=File.presentation_choices,
+              ids=[]):
     """Returns a list of unique :py:class:`.File` objects for the specific query by the user.
 
     Keyword parameters:
@@ -92,13 +52,13 @@ class Database(Database):
       value None, then the parameter value is considered to be the set of all instruments.
 
     group
-      One of the subgroups of data ('train', 'devel', 'test') as returned by groups() 
-      or any combination of them in a tuple. If set to an empty string or the value None, 
+      One of the subgroups of data ('train', 'devel', 'test') as returned by groups()
+      or any combination of them in a tuple. If set to an empty string or the value None,
       it is reset to the default which is to get all subgroups.
 
     cls
       Either "attack", or "real", or both (in a tuple). Defines the presentation
-      of the data to be retrieved.  If parameter is set to an empty string or 
+      of the data to be retrieved.  If parameter is set to an empty string or
       the value None, the value is reset to the default: ("real", "attack").
 
     fold:
@@ -108,8 +68,8 @@ class Database(Database):
       If desired, several folds may be specified together, as a tuple.
 
     ids:
-      The id of the client whose videos need to be retrieved. Should be an integer number belonging this list: 
-      ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', 
+      The id of the client whose videos need to be retrieved. Should be an integer number belonging this list:
+      ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26',
       '28', '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53]
 
 #    protocol --NOT USED FOR NOW. THIS COMMENT WILL BE REMOVED.
@@ -120,21 +80,9 @@ class Database(Database):
     Returns: A list of :py:class:`.File` objects.
     """
 
-    self.ids = ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', '28', '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53', '54', '55'] # all the client IDs
-
+    self.ids = ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', '28', '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53', '54', '55']  # all the client IDs
 
     self.assert_validity()
-
-    def check_validity(l, paramType, valid, default):
-      """Checks validity of user input data against a set of valid values"""
-      if not l:
-        return default
-      elif not isinstance(l, (tuple, list)):
-        return check_validity((l,), paramType, valid, default)
-      for k in l:
-        if k not in valid:
-          raise RuntimeError('Invalid %s "%s". Valid values are %s, or lists/tuples of those' % (paramType, k, valid))
-      return l
 
     def check_fold_validity(f, valid, default):
       """Checks validity of user input parameter 'fold' against a set of valid values"""
@@ -148,14 +96,13 @@ class Database(Database):
 
       return f
 
-
     # checks if 'quality' param is valid
     VALID_QUALITIES = self.qualities()
-    quality = check_validity(quality, "quality", VALID_QUALITIES, VALID_QUALITIES)
+    quality = self.check_parameters_for_validity(quality, "quality", VALID_QUALITIES, VALID_QUALITIES)
 
     # check if 'instrument' set are valid
     VALID_INSTRUMENTS = self.attack_instruments()
-    instrument = check_validity(instrument, "attack_instrument", VALID_INSTRUMENTS, VALID_INSTRUMENTS)
+    instrument = self.check_parameters_for_validity(instrument, "attack_instrument", VALID_INSTRUMENTS, VALID_INSTRUMENTS)
 
     # checks if the 'fold' param. is valid
     VALID_FOLDS = self.folds()
@@ -163,15 +110,15 @@ class Database(Database):
 
     # check if groups set are valid
     VALID_GROUPS = self.groups()
-    group = check_validity(group, "group", VALID_GROUPS, VALID_GROUPS)
+    group = self.check_parameters_for_validity(group, "group", VALID_GROUPS, VALID_GROUPS)
 
     # by default, do NOT grab enrollment data from the database
-    VALID_PRESENTATIONS = self.presentation_classes() #('real', 'attack')
-    cls = check_validity(cls, "presentation", VALID_PRESENTATIONS, ('real', 'attack'))
+    VALID_PRESENTATIONS = self.presentation_classes()  # ('real', 'attack')
+    cls = self.check_parameters_for_validity(cls, "presentation", VALID_PRESENTATIONS, ('real', 'attack'))
 
     # if ids is specified, check that they appear in the list of valid ids.
     VALID_IDS = self.ids
-    ids = check_validity(ids, "id", VALID_IDS, VALID_IDS)
+    ids = self.check_parameters_for_validity(ids, "id", VALID_IDS, VALID_IDS)
 
 #    # check protocol validity
 #    if not protocol:
@@ -182,28 +129,27 @@ class Database(Database):
 #    VALID_CLIENTS = [k.id for k in self.clients()]
 #    clients = check_validity(clients, "client", VALID_CLIENTS, None)
 
-
     # now query the database
     retval = []
 
-#    q = self.session.query(File, Client.id, Client.client_fold1).join(Client)
-    q = self.session.query(File, Client).join(Client)
+#    q = self.query(File, Client.id, Client.client_fold1).join(Client)
+    q = self.query(File, Client).join(Client)
 
-    if ids:   #filter by id
+    if ids:  # filter by id
         q = q.filter(Client.id.in_(ids))
 
-    if cls: #presentation: real or attack
+    if cls:  # presentation: real or attack
       q = q.filter(File.cls.in_(cls))
 
-    if fold=='fold1':
+    if fold == 'fold1':
       q = q.filter(Client.client_fold1.in_(group))
-    elif fold=='fold2':
+    elif fold == 'fold2':
       q = q.filter(Client.client_fold2.in_(group))
-    elif fold=='fold3':
+    elif fold == 'fold3':
       q = q.filter(Client.client_fold3.in_(group))
-    elif fold=='fold4':
+    elif fold == 'fold4':
       q = q.filter(Client.client_fold4.in_(group))
-    elif fold=='fold5':
+    elif fold == 'fold5':
       q = q.filter(Client.client_fold5.in_(group))
     else:
       raise RuntimeError('Invalid Fold: "%s". Valid values are one string of %s' % (fold, VALID_FOLDS))
@@ -215,8 +161,8 @@ class Database(Database):
       q = q.filter(File.instrument.in_(instrument))
 
 #    q = q.filter(Protocol.name.in_(protocol))
-    q = q.order_by(File.cls.desc()).order_by(Client.id) # first order by 'real' or 'attack' (desc() puts the 'reals' first), 
-							# and within each presentation, order by client-Id.
+    q = q.order_by(File.cls.desc()).order_by(Client.id)  # first order by 'real' or 'attack' (desc() puts the 'reals' first),
+# and within each presentation, order by client-Id.
     retval = list(q)
 
     files = []
@@ -265,26 +211,26 @@ class Database(Database):
 #    """Returns an iterable with all known clients"""
 #
 #    self.assert_validity()
-#    return list(self.session.query(Client))
+#    return list(self.query(Client))
 
 #  def has_client_id(self, id):
 #    """Returns True if we have a client with a certain integer identifier"""
 #
 #    self.assert_validity()
-#    return self.session.query(Client).filter(Client.id == id).count() != 0
+#    return self.query(Client).filter(Client.id == id).count() != 0
 
 #  def protocols(self):
 #    """Returns all protocol objects.
 #    """
 #
 #    self.assert_validity()
-#    return list(self.session.query(Protocol))
+#    return list(self.query(Protocol))
 
 #  def has_protocol(self, name):
 #    """Tells if a certain protocol is available"""
 #
 #    self.assert_validity()
-#    return self.session.query(Protocol).filter(Protocol.name == name).count() != 0
+#    return self.query(Protocol).filter(Protocol.name == name).count() != 0
 
 
 #  def protocol(self, name):
@@ -292,8 +238,7 @@ class Database(Database):
 #    an error if that does not exist."""
 #
 #    self.assert_validity()
-#    return self.session.query(Protocol).filter(Protocol.name == name).one()
-
+#    return self.query(Protocol).filter(Protocol.name == name).one()
 
   def groups(self):
     """Returns the names of all registered groups"""
@@ -315,37 +260,6 @@ class Database(Database):
     """Returns the kinds of presentation (real or attack) available in the database"""
     return File.presentation_choices
 
-
-
-  def paths(self, ids, prefix='', suffix=''):
-    """Returns a full file paths considering particular file ids, a given
-    directory and an extension
-
-    Keyword Parameters:
-
-    id
-      The ids of the object in the database table "file". This object should be
-      a python iterable (such as a tuple or list).
-
-    prefix
-      The bit of path to be prepended to the filename stem
-
-    suffix
-      The extension determines the suffix that will be appended to the filename
-      stem.
-
-    Returns a list (that may be empty) of the fully constructed paths given the
-    file ids.
-    """
-
-    self.assert_validity()
-
-    fobj = self.session.query(File).filter(File.id.in_(ids))
-    retval = []
-    for p in ids:
-      retval.extend([k.make_path(prefix, suffix) for k in fobj if k.id == p])
-    return retval
-
 #  def reverse(self, paths):
 #    """Reverses the lookup: from certain stems, returning file ids
 #
@@ -360,7 +274,7 @@ class Database(Database):
 #
 #    self.assert_validity()
 #
-#    fobj = self.session.query(File).filter(File.path.in_(paths))
+#    fobj = self.query(File).filter(File.path.in_(paths))
 #    for p in paths:
 #      retval.extend([k.id for k in fobj if k.path == p])
 #    return retval
@@ -397,7 +311,7 @@ class Database(Database):
 #
 #    self.assert_validity()
 #
-#    fobj = self.session.query(File).filter_by(id=id).one()
+#    fobj = self.query(File).filter_by(id=id).one()
 #
 #    fullpath = os.path.join(directory, str(fobj.path) + extension)
 #    fulldir = os.path.dirname(fullpath)
