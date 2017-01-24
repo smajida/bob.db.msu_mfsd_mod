@@ -13,7 +13,6 @@ from . import Database, File
 from nose.plugins.skip import SkipTest
 import bob.io.base
 import bob.io.video
-import bob.io.image
 import bob.db.base
 import numpy as np
 
