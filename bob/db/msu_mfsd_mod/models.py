@@ -12,9 +12,11 @@ from sqlalchemy.ext.declarative import declarative_base
 import numpy
 import bob.io.video
 from bob.db.base import File as BaseFile
+import bob.core
 
 
 Base = declarative_base()
+logger = bob.core.log.setup('bob.db.msu_mfsd_mod')
 
 
 class Client(Base):
@@ -282,8 +284,7 @@ class File(Base, BaseFile):
     else:
         vin = bob.io.base.load(self.make_path(directory, extension))
 
-    print('is_rotated:')
-    print(self.is_rotated())
+    logger.debug('{} is_rotated: {}'.format(self, self.is_rotated()))
     if self.is_rotated():
         vin = vin[:, :, ::-1, :]
 
