@@ -161,10 +161,10 @@ class File(Base, BaseFile):
     return self.quality
 
   def get_instrument(self):
-    """Returns the attack-instrument (formerly, type) associated with the file-object. 
+    """Returns the attack-instrument (formerly, type) associated with the file-object.
     Return:
-    String, one of: 'video_hd', 'video_mobile', 'print', or None 
-    Returns None only when the presentation is 'real' 
+    String, one of: 'video_hd', 'video_mobile', 'print', or None
+    Returns None only when the presentation is 'real'
     """
     return self.instrument
 
@@ -205,8 +205,8 @@ class File(Base, BaseFile):
     directory: A directory name that will be prepended to the final filepaths where the face bounding boxes are located, if not on the current directory.
 
     Returns:
-      A :py:class:`numpy.ndarray` containing information about the located faces in the videos. 
-      Each row of the :py:class:`numpy.ndarray` corresponds for one frame. 
+      A :py:class:`numpy.ndarray` containing information about the located faces in the videos.
+      Each row of the :py:class:`numpy.ndarray` corresponds for one frame.
       The five columns of the :py:class:`numpy.ndarray` are (all integers):
       * Frame number (int)
       * Bounding box top-left X coordinate (int)
@@ -225,12 +225,13 @@ class File(Base, BaseFile):
     return coords
 
   def get_client_id(self):
-    """The ID of the client. Value from 1 to 50. Clients in the train and devel set may have IDs from 1 to 20; 
+    """The ID of the client. Value from 1 to 50. Clients in the train and devel set may have IDs from 1 to 20;
        clients in the test set have IDs from 21 to 50.
     """
-
-    stem_file = self.path.split('/')[1]  # the file stem of the filename
-    stem_client = self.path.split('_')[1]  # the client stem of the filename
+    # real_clientID_cameraType_resolution_scenario
+    # attack_clientID_cameraType_resolution_attackType_scenario
+    stem_file = os.path.basename(self.path)  # the file stem of the filename
+    stem_client = stem_file.split('_')[1]  # the client stem of the filename
     return stem_client[-2:]
 
   def is_real(self):
@@ -295,7 +296,7 @@ class File(Base, BaseFile):
 
     Keyword parameters:
     data: The data blob to be saved (normally a :py:class:`numpy.ndarray`).
-    directory: If specified (not empty and not None), this directory is prefixed to the final file destination 
+    directory: If specified (not empty and not None), this directory is prefixed to the final file destination
     extension: The filename-extension - this determines the type of output and the codec for saving the input blob.
     """
 
