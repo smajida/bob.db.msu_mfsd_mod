@@ -2,10 +2,10 @@
 # vim: set fileencoding=utf-8 :
 
 """ The MSU MFSD Database for face spoofing interface. It is an extension of an
-SQL-based database interface, which directly talks to the MSU MFSD database, for
-verification experiments (good to use in the bob.bio.base framework). It also
-implements a kind of hack so that you can run vulnerability analysis with it.
-"""
+SQL-based database interface, which directly talks to the MSU MFSD database,
+for verification experiments (good to use in the bob.bio.base framework). It
+also implements a kind of hack so that you can run vulnerability analysis with
+it. """
 
 from bob.db.base import File as BaseFile
 from bob.db.base import Database as BaseDatabase
@@ -23,7 +23,8 @@ def selected_indices(total_number_of_indices, desired_number_of_indices=None):
     if desired_number_of_indices is None or desired_number_of_indices >= \
        total_number_of_indices or desired_number_of_indices < 0:
         return range(total_number_of_indices)
-    increase = float(total_number_of_indices) / float(desired_number_of_indices)
+    increase = float(total_number_of_indices) / \
+        float(desired_number_of_indices)
     # generate a regular quasi-random index list
     return [int((i + .5) * increase) for i in range(desired_number_of_indices)]
 
@@ -36,15 +37,14 @@ class File(BaseFile):
         self._f = f
         self.framen = framen
         self.path = '{}_{:03d}'.format(f.path, framen)
-        self.client_id = f.client_id
+        self.client_id = '{:02d}'.format(f.client_id)
         self.file_id = '{}_{}'.format(f.id, framen)
         super(File, self).__init__(path=self.path, file_id=self.file_id)
 
     def load(self, directory=None, extension=None):
-        if extension in (None, '.mov'):
+        if extension in (None, '.mov', '.mp4'):
             # the extension is dynamic; the low-level knows about it.
-            if extension == '.mov':
-                extension = None
+            extension = None
             for i in range(100):
                 try:
                     video = self._f.load(directory, extension)
@@ -119,11 +119,11 @@ class Database(BaseDatabase):
         # The low-level API has only "attack", and "real"
         if len(purposes) > 1 and model_ids:
             raise NotImplementedError(
-               'Currently returning both enroll and probe for specific '
-               'client(s) is not supported. Please specify one purpose only.')
+                'Currently returning both enroll and probe for specific '
+                'client(s) is not supported. Please specify one purpose only.')
 
-        # the protcol is designed here. You can see depending on the purpose and
-        # protocl, different qualities and classes are selected.
+        # the protcol is designed here. You can see depending on the purpose
+        # and protocl, different qualities and classes are selected.
 
         qualities = []
         classes = []
@@ -139,7 +139,6 @@ class Database(BaseDatabase):
             else:
                 qualities = None  # all qualities
                 classes.append('attack')
-                model_ids = None  # all models
 
         # now, query the actual Replay database
         objects = self._db.objects(group=groups, quality=qualities,
