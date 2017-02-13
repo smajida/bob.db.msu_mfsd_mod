@@ -11,8 +11,8 @@ MSU Mobile Face Presentation Attack Database
 .. todolist::
 
 The MSU-MFSD is a presentation attack database which consists of printed
-attacks, as well as replay attacks recorded with mobile phones and tablets. The
-acquisition devices were laptops and Android phones.
+attacks, as well as replay attacks generated with a mobile phone and a tablet.
+The acquisition devices were a laptop and an Android phone.
 
 The actual raw data for `MSU MFSD`_ database should be downloaded from the
 original URL.

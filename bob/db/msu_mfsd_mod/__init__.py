@@ -7,6 +7,7 @@
 """
 
 from .query import Database
+from .verificationprotocol import Database as VerificationDatabase, File as VerificationFile
 from .models import Client, File
 
 def get_config():
