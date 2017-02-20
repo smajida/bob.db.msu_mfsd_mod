@@ -65,13 +65,13 @@ class Database(BaseDatabase):
     """
     __doc__ = __doc__
 
-    def __init__(self, max_number_of_frames=3):
+    def __init__(self, max_number_of_frames=10):
         super(Database, self).__init__()
 
         # call base class constructors to open a session to the database
         self._db = LDatabase()
 
-        self.max_number_of_frames = max_number_of_frames or 3
+        self.max_number_of_frames = max_number_of_frames or 10
         # 180 is the guaranteed number of frames in msu mfsd videos
         self.indices = selected_indices(180, self.max_number_of_frames)
         self.low_level_group_names = ('train', 'devel', 'test')
