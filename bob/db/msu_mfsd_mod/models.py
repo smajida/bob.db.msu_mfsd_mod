@@ -208,19 +208,22 @@ class File(Base, BaseFile):
       A :py:class:`numpy.ndarray` containing information about the located faces in the videos.
       Each row of the :py:class:`numpy.ndarray` corresponds for one frame.
       The five columns of the :py:class:`numpy.ndarray` are (all integers):
-      * Frame number (int)
-      * Bounding box top-left X coordinate (int)
-      * Bounding box top-left Y coordinate (int)
-      * Bounding box width (int)
-      * Bounding box height (int)
+      * Frame number (float)
+      * Bounding box top-left X coordinate (float)
+      * Bounding box top-left Y coordinate (float)
+      * Bounding box width (float)
+      * Bounding box height (float)
+      * Left eye X coordinate (float)
+      * Left eye Y coordinate (float)
+      * Right eye X coordinate (float)
+      * Right eye Y coordinate (float)
 
       Note that **not** all the frames may contain detected faces.
     """
 
-    coords = numpy.loadtxt(self.facefile(directory), dtype=int, delimiter=',', usecols=range(0, 5))  # reads all the locations as integers
-    for i in range(0, coords.shape[0]):
-      coords[i, 3] = coords[i, 3] - coords[i, 1]
-      coords[i, 4] = coords[i, 4] - coords[i, 2]
+    coords = numpy.loadtxt(self.facefile(directory), delimiter=',')
+    coords[:, 3] = coords[:, 3] - coords[:, 1]
+    coords[:, 4] = coords[:, 4] - coords[:, 2]
 
     return coords
 
