@@ -25,9 +25,10 @@ class Database(SQLiteDatabase):
   and for the data itself inside the database.
   """
 
-  def __init__(self):
+  def __init__(self, original_directory=None, original_extension=None):
     # opens a session to the database - keep it open until the end
-    super(Database, self).__init__(SQLITE_FILE, File)
+    super(Database, self).__init__(SQLITE_FILE, File,
+                                   original_directory, original_extension)
 
   def objects(self, quality=File.quality_choices,
               instrument=File.instrument_choices,
@@ -80,7 +81,8 @@ class Database(SQLiteDatabase):
     Returns: A list of :py:class:`.File` objects.
     """
 
-    self.ids = ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', '28', '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53', '54', '55']  # all the client IDs
+    self.ids = ['01', '02', '03', '05', '06', '07', '08', '09', '11', '12', '13', '14', '21', '22', '23', '24', '26', '28',
+                '29', '30', '32', '33', '34', '35', '36', '37', '39', '42', '48', '49', '50', '51', '53', '54', '55']  # all the client IDs
 
     self.assert_validity()
 
@@ -90,19 +92,23 @@ class Database(SQLiteDatabase):
         return default
       elif isinstance(f, string_types):
         if f not in valid:
-          raise RuntimeError('Invalid fold-parameter: "%s". Valid values are *exactly one* of the strings: %s' % (f, valid))
+          raise RuntimeError(
+              'Invalid fold-parameter: "%s". Valid values are *exactly one* of the strings: %s' % (f, valid))
       else:
-        raise RuntimeError('Invalid type for fold-parameter: "%s". It should be a single string from the set: %s.' % (f, valid))
+        raise RuntimeError(
+            'Invalid type for fold-parameter: "%s". It should be a single string from the set: %s.' % (f, valid))
 
       return f
 
     # checks if 'quality' param is valid
     VALID_QUALITIES = self.qualities()
-    quality = self.check_parameters_for_validity(quality, "quality", VALID_QUALITIES, VALID_QUALITIES)
+    quality = self.check_parameters_for_validity(
+        quality, "quality", VALID_QUALITIES, VALID_QUALITIES)
 
     # check if 'instrument' set are valid
     VALID_INSTRUMENTS = self.attack_instruments()
-    instrument = self.check_parameters_for_validity(instrument, "attack_instrument", VALID_INSTRUMENTS, VALID_INSTRUMENTS)
+    instrument = self.check_parameters_for_validity(
+        instrument, "attack_instrument", VALID_INSTRUMENTS, VALID_INSTRUMENTS)
 
     # checks if the 'fold' param. is valid
     VALID_FOLDS = self.folds()
@@ -110,11 +116,13 @@ class Database(SQLiteDatabase):
 
     # check if groups set are valid
     VALID_GROUPS = self.groups()
-    group = self.check_parameters_for_validity(group, "group", VALID_GROUPS, VALID_GROUPS)
+    group = self.check_parameters_for_validity(
+        group, "group", VALID_GROUPS, VALID_GROUPS)
 
     # by default, do NOT grab enrollment data from the database
     VALID_PRESENTATIONS = self.presentation_classes()  # ('real', 'attack')
-    cls = self.check_parameters_for_validity(cls, "presentation", VALID_PRESENTATIONS, ('real', 'attack'))
+    cls = self.check_parameters_for_validity(
+        cls, "presentation", VALID_PRESENTATIONS, ('real', 'attack'))
 
     # if ids is specified, check that they appear in the list of valid ids.
     VALID_IDS = self.ids
@@ -136,7 +144,7 @@ class Database(SQLiteDatabase):
     q = self.query(File, Client).join(Client)
 
     if ids:  # filter by id
-        q = q.filter(Client.id.in_(ids))
+      q = q.filter(Client.id.in_(ids))
 
     if cls:  # presentation: real or attack
       q = q.filter(File.cls.in_(cls))
@@ -152,7 +160,8 @@ class Database(SQLiteDatabase):
     elif fold == 'fold5':
       q = q.filter(Client.client_fold5.in_(group))
     else:
-      raise RuntimeError('Invalid Fold: "%s". Valid values are one string of %s' % (fold, VALID_FOLDS))
+      raise RuntimeError(
+          'Invalid Fold: "%s". Valid values are one string of %s' % (fold, VALID_FOLDS))
 
     if quality:
       q = q.filter(File.quality.in_(quality))
@@ -161,18 +170,19 @@ class Database(SQLiteDatabase):
       q = q.filter(File.instrument.in_(instrument))
 
 #    q = q.filter(Protocol.name.in_(protocol))
-    q = q.order_by(File.cls.desc()).order_by(Client.id)  # first order by 'real' or 'attack' (desc() puts the 'reals' first),
+    # first order by 'real' or 'attack' (desc() puts the 'reals' first),
+    q = q.order_by(File.cls.desc()).order_by(Client.id)
 # and within each presentation, order by client-Id.
     retval = list(q)
 
     files = []
     for r in retval:
-        f = r[0]
-        c = r[1]
+      f = r[0]
+      c = r[1]
 
-        f.client_id = c.id
-        f.client_fold = c.client_fold1
-        files.append(f)
+      f.client_id = c.id
+      f.client_fold = c.client_fold1
+      files.append(f)
 
     return files
 
@@ -205,7 +215,8 @@ class Database(SQLiteDatabase):
 #    import warnings
 #    warnings.warn("The method Database.files() is deprecated, use Database.objects() for more powerful object retrieval", DeprecationWarning)
 #
-#    return dict([(k.id, k.make_path(directory, extension)) for k in self.objects(**object_query)])
+# return dict([(k.id, k.make_path(directory, extension)) for k in
+# self.objects(**object_query)])
 
 #  def clients(self):
 #    """Returns an iterable with all known clients"""

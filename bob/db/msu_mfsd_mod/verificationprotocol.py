@@ -65,8 +65,9 @@ class Database(BaseDatabase):
     """
     __doc__ = __doc__
 
-    def __init__(self, max_number_of_frames=10):
-        super(Database, self).__init__()
+    def __init__(self, max_number_of_frames=10,
+                 original_directory=None, original_extension=None):
+        super(Database, self).__init__(original_directory, original_extension)
 
         # call base class constructors to open a session to the database
         self._db = LDatabase()
