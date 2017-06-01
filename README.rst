@@ -5,10 +5,10 @@
    :target: http://pythonhosted.org/bob.db.msu_mfsd_mod/index.html
 .. image:: http://img.shields.io/badge/docs-latest-orange.svg
    :target: https://www.idiap.ch/software/bob/docs/latest/bioidiap/bob.db.msu_mfsd_mod/master/index.html
-.. image:: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/badges/v2.2.1/build.svg
-   :target: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/commits/v2.2.1
-.. image:: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/badges/v2.2.1/coverage.svg
-   :target: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/commits/v2.2.1
+.. image:: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/badges/master/build.svg
+   :target: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/commits/master
+.. image:: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/badges/master/coverage.svg
+   :target: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod/commits/master
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod
 .. image:: http://img.shields.io/pypi/v/bob.db.msu_mfsd_mod.svg
