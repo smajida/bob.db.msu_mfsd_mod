@@ -28,7 +28,7 @@ Bob_. It provides a Bob-interface for the MSU Mobile Face Spoofing Database.
 Installation
 ------------
 
-Complete Bob's `installation`_ instructions. Then, to install this pacakge,
+Complete Bob's `installation`_ instructions. Then, to install this package,
 run::
 
   $ conda install bob.db.msu_mfsd_mod
