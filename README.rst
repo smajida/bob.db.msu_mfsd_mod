@@ -13,8 +13,6 @@
    :target: https://gitlab.idiap.ch/bob/bob.db.msu_mfsd_mod
 .. image:: http://img.shields.io/pypi/v/bob.db.msu_mfsd_mod.svg
    :target: https://pypi.python.org/pypi/bob.db.msu_mfsd_mod
-.. image:: http://img.shields.io/pypi/dm/bob.db.msu_mfsd_mod.svg
-   :target: https://pypi.python.org/pypi/bob.db.msu_mfsd_mod
 
 
 ====================================================
