@@ -145,6 +145,8 @@ class MFSDDatabaseTest(unittest.TestCase):
         hf = bob.io.base.HDF5File(os.path.join(
             dbfolder, 'real_client005_android_SD_scene01_frame0_correct.hdf5'), 'r')
         reference_frame1 = hf.read('color_frame')
+        # reference_frame1 is not correct. Fix it here:
+        reference_frame1 = reference_frame1[:, :, ::-1]
         difsum1 = np.sum(np.fabs(firstframe - reference_frame1))
 #        print 'flipped video: SAD:', difsum1
         self.assertTrue(np.array_equal(firstframe, reference_frame1))
