@@ -290,7 +290,7 @@ class File(Base, BaseFile):
 
     logger.debug('{} is_rotated: {}'.format(self, self.is_rotated()))
     if self.is_rotated():
-        vin = vin[:, :, ::-1, :]
+        vin = vin[:, :, ::-1, ::-1]
 
     return vin
 
